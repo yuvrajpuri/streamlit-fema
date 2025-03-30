@@ -32,18 +32,6 @@ def get_gps_coordinates(image_path):
             return lat, lon
     return None, None
 
-#with open("sample_images_for_inference/0_000_05_153.jpg", "rb") as image_file:
-#    image = Image(image_file)
-#    if image.has_exif:
-#        lat = image.gps_latitude
-#        lat_ref = image.gps_latitude_ref
-#        lon = image.gps_longitude
-#        lon_ref = image.gps_longitude_ref
-
- #       st.write(f"Latitude: {lat} {lat_ref}, Longitude: {lon} {lon_ref}")
- #   else:
- #       st.write("No EXIF metadata found.")
-
 
 image_folder = "sample_images_for_inference"
 
