@@ -2,6 +2,8 @@
 
 import streamlit as st
 import tensorflow as tf
+import io
+from contextlib import redirect_stdout
 
 st.title("Final Output Page")
 
@@ -9,13 +11,25 @@ st.write("Not entirely sure what to put here yet. Maybe a combination of everyth
 
 st.write("If there are any suggestions for what to include, please let me know.")
 
+st.header("Test run for tensorflow models.")
+
 model = tf.keras.models.Sequential([
   tf.keras.layers.Flatten(input_shape=(28, 28)),
   tf.keras.layers.Dense(128, activation='relu'),
   tf.keras.layers.Dropout(0.2),
   tf.keras.layers.Dense(10)
 ])
-st.write(model.summary())
-print((model.summary()))
 
-# The same problems I had with Jupyter that stopped me from running anything with tensorflow are rearing their head here.
+# New method to redirect output from console so we can present it on the screen
+
+# Capture model.summary() output
+def get_model_summary(model):
+    buffer = io.StringIO()
+    with redirect_stdout(buffer):  # Redirect console output to buffer
+        model.summary()
+    return buffer.getvalue()
+
+ms_str = get_model_summary(model)
+
+st.title("Model Summary")
+st.text(ms_str)
