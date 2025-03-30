@@ -1,0 +1,4 @@
+streamlit
+striprtf
+EXIF
+tensorflow
