@@ -20,6 +20,9 @@ model = tf.keras.models.Sequential([
   tf.keras.layers.Dense(10)
 ])
 
+# note that the time it took for the page to load in was increased due to the actual import + creation of the model
+# Need to see if this can be put in a session state. 
+
 # New method to redirect output from console so we can present it on the screen
 
 # Capture model.summary() output
@@ -35,4 +38,5 @@ st.title("Model Summary")
 # st.text(ms_str)
 # Using st.text had a bit of an odd output where the symbols were out of line with the text. Attempting st.write.
 
-st.write(ms_str)
+# st.write(ms_str)
+# Using st.write was even worse when it came to alignment. For now, these types of console outputs will have to be excluded.
