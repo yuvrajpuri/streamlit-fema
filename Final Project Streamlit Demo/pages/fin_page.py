@@ -16,6 +16,6 @@ model = tf.keras.models.Sequential([
   tf.keras.layers.Dense(10)
 ])
 st.write(model.summary())
-print(type(model.summary()))
+print((model.summary()))
 
 # The same problems I had with Jupyter that stopped me from running anything with tensorflow are rearing their head here.
