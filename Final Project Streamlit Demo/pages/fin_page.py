@@ -32,4 +32,7 @@ def get_model_summary(model):
 ms_str = get_model_summary(model)
 
 st.title("Model Summary")
-st.text(ms_str)
+# st.text(ms_str)
+# Using st.text had a bit of an odd output where the symbols were out of line with the text. Attempting st.write.
+
+st.write(ms_str)
