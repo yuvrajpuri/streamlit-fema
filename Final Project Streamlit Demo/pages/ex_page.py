@@ -63,7 +63,7 @@ elif option == "URL":
 
 # If image is available, process it
 if "image" in locals():
-    st.image(image, caption="Original Image", use_column_width=True)
+    st.image(image, caption="Original Image", use_container_width=True)
 
     # Toggle for bounding boxes
     draw_boxes = st.checkbox("Show Bounding Boxes", value=True)
@@ -72,4 +72,4 @@ if "image" in locals():
     detected_image = detect_objects(image, draw_boxes=draw_boxes)
 
     # Display the processed image
-    st.image(detected_image, caption="Processed Image", use_column_width=True)
+    st.image(detected_image, caption="Processed Image", use_container_width=True)
