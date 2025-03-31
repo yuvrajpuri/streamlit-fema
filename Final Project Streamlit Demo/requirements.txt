@@ -2,3 +2,4 @@ streamlit
 striprtf
 EXIF
 tensorflow
+ultralytics
