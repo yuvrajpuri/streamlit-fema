@@ -7,7 +7,10 @@ crop_page = st.Page("pages/crop_page.py", title= "Cropping")
 geo_page = st.Page("geo_page.py", title = "Georeferencing")
 fin_page = st.Page("pages/fin_page.py", title = "Final Output")
 
-pg = st.navigation([main_page, ob_page, cap_page, crop_page, geo_page, fin_page])
+# Edit : adding a test example page for trying to utilize Object Detection
+ex_page = st.Page("pages/ex_page.py", title = "Example Object Detection")
+
+pg = st.navigation([main_page, ob_page, cap_page, crop_page, geo_page, fin_page, ex_page])
 
 # Run the selected page
 pg.run()
