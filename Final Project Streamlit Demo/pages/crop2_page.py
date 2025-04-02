@@ -12,6 +12,7 @@ st.write("Here is where we will showcase the cropping tool developed by another 
 
 
 # Add the "CSCI_E-599a-Bounding_Box_Cropping" folder to sys.path
+print(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping"))
 
 # Import existing script
