@@ -9,62 +9,35 @@ from PIL import Image
 st.header("Cropping Tool Example")
 st.write("Here is where we will showcase the cropping tool developed by another teammate.")
 
-import streamlit as st
-import cv2
-import json
-import numpy as np
-from PIL import Image
 
-# File paths for the pre-existing image and JSON
-IMAGE_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.png"
-JSON_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.json"
+# Add the "CSCI_E-599a-Bounding_Box_Cropping" folder to sys.path
+sys.path.append(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping"))
 
-def crop_bounding_boxes(image, annotations):
-    """
-    Crop bounding boxes from the given image based on JSON annotation data.
-    
-    :param image: Original image as a NumPy array.
-    :param annotations: JSON data containing bounding boxes.
-    :return: List of cropped images.
-    """
-    img_height, img_width, _ = image.shape
-    cropped_images = []
+# Import existing script
+import test_600x600  
 
-    for i, bbox in enumerate(annotations["boxes"], start=1):
-        # Convert coordinates to integers
-        x, y, w, h = map(lambda v: round(float(v)), [bbox["x"], bbox["y"], bbox["width"], bbox["height"]])
+# File paths (Assume pre-existing files)
 
-        # Ensure bounding box is within image bounds
-        x = max(0, min(x, img_width - 1))
-        y = max(0, min(y, img_height - 1))
-        w = max(1, min(w, img_width - x))
-        h = max(1, min(h, img_height - y))
+IMAGE_PATH = "source data/image_00191.png"
+JSON_PATH = "source data/image_00191.json"
+OUTPUT_DIR = "cropped_objects"
 
-        # Crop the bounding box
-        cropped_img = image[y:y+h, x:x+w]
-        cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2RGB)  # Convert OpenCV BGR to RGB
-        cropped_images.append(Image.fromarray(cropped_img))
+# Ensure output directory exists
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    return cropped_images
+# Run the existing script automatically
+st.title("Bounding Box Cropping Results")
+st.subheader("Original Image")
+st.image(IMAGE_PATH, caption="Original Image", use_column_width=True)
 
-# Streamlit UI
-st.title("Bounding Box Cropping Tool")
-
-# Load image
-image = Image.open(IMAGE_PATH)
-image_np = np.array(image)  # Convert to NumPy array for OpenCV
-
-# Load JSON
-with open(JSON_PATH, 'r') as f:
-    annotations = json.load(f)
-
-# Display original image
-st.image(image, caption="Original Image", use_column_width=True)
-
-# Crop images
-cropped_images = crop_bounding_boxes(image_np, annotations)
+st.subheader("Running the Cropping Program...")
+test_600x600.crop_bounding_boxes(IMAGE_PATH, JSON_PATH, OUTPUT_DIR)
 
 # Display cropped images
 st.subheader("Cropped Objects")
-for idx, cropped_img in enumerate(cropped_images):
-    st.image(cropped_img, caption=f"Cropped Object {idx+1}", use_container_width=False)
+cropped_files = sorted([os.path.join(OUTPUT_DIR, f) for f in os.listdir(OUTPUT_DIR) if f.endswith(".png")])
+
+for file in cropped_files:
+    st.image(file, caption=os.path.basename(file), use_container_width=False)
+
+st.success("Processing Complete! All images displayed.")
