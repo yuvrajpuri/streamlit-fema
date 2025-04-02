@@ -17,7 +17,7 @@ crop2_page = st.Page("pages/crop2_page.py", title = "Cropping Tool Examples")
 
 # Note: does not have the implementation yet to account for cropping an image selected yet. 
 
-pg = st.navigation([main_page, ob_page, cap_page, crop_page, geo_page, fin_page, ex_page])
+pg = st.navigation([main_page, ob_page, cap_page, crop_page, geo_page, fin_page, ex_page, crop2_page])
 
 # Run the selected page
 pg.run()
