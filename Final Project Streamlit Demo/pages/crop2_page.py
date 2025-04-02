@@ -20,6 +20,8 @@ import test_600x600
 
 # File paths (Assume pre-existing files)
 # Current error: file not found. Updating the path.
+# Error found: the file self calls the image paths within the local directory - i.e. "imagexxxx.png". Need to change the local directory first.
+# Use the sys path append.
 
 print(os.getcwd())
 IMAGE_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.png"
@@ -35,6 +37,8 @@ st.subheader("Original Image")
 st.image(IMAGE_PATH, caption="Original Image", use_column_width=True)
 
 st.subheader("Running the Cropping Program...")
+
+sys.path.append(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping", "source data"))
 test_600x600.crop_bounding_boxes(IMAGE_PATH, JSON_PATH, OUTPUT_DIR)
 
 # Display cropped images
