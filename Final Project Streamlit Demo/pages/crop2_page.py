@@ -12,7 +12,7 @@ st.write("Here is where we will showcase the cropping tool developed by another 
 
 
 # Add the "CSCI_E-599a-Bounding_Box_Cropping" folder to sys.path
-sys.path.append(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping", "source data"))
+os.chdir(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping", "scripts"))
 
 # Import existing script
 # FIXED: The fix is to rename the file for the test. 
