@@ -12,7 +12,7 @@ st.write("Here is where we will showcase the cropping tool developed by another 
 
 
 # Add the "CSCI_E-599a-Bounding_Box_Cropping" folder to sys.path
-sys.path.append(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping"))
+sys.path.append(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping", "source data"))
 
 # Import existing script
 # FIXED: The fix is to rename the file for the test. 
@@ -22,6 +22,7 @@ import test_600x600
 # Current error: file not found. Updating the path.
 # Error found: the file self calls the image paths within the local directory - i.e. "imagexxxx.png". Need to change the local directory first.
 # Use the sys path append.
+# UPDATE: move the test_600x600.py that was renamed to the source data directory.
 
 print(os.getcwd())
 IMAGE_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.png"
