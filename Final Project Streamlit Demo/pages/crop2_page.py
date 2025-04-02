@@ -21,6 +21,7 @@ import test_600x600
 # File paths (Assume pre-existing files)
 # Current error: file not found. Updating the path.
 
+print(os.getcwd())
 IMAGE_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.png"
 JSON_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.json"
 OUTPUT_DIR = "cropped_objects"
