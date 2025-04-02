@@ -12,16 +12,17 @@ st.write("Here is where we will showcase the cropping tool developed by another 
 
 
 # Add the "CSCI_E-599a-Bounding_Box_Cropping" folder to sys.path
-print(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping"))
 
 # Import existing script
+# FIXED: The fix is to rename the file for the test. 
 import test_600x600  
 
 # File paths (Assume pre-existing files)
+# Current error: file not found. Updating the path.
 
-IMAGE_PATH = "source data/image_00191.png"
-JSON_PATH = "source data/image_00191.json"
+IMAGE_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.png"
+JSON_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.json"
 OUTPUT_DIR = "cropped_objects"
 
 # Ensure output directory exists
