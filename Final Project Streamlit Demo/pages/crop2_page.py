@@ -16,7 +16,7 @@ st.write("Here is where we will showcase the cropping tool developed by another 
 # Variables
 
 # Base directory
-source_base_dir = "../source"  # Base directory for source data
+source_base_dir = "/content/streamlit-fema/Final Project Streamlit Demo/pages/source"  # Base directory for source data
 
 # JSON file name
 json_file_name = "_annotations.coco.json"
