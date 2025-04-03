@@ -166,7 +166,7 @@ if test_processed_pics:
     image_options = [img[0] for img in test_processed_pics]
     selected_image = st.selectbox("Select an image", image_options)
 
-    for img_name, bbox_img, crops in processed_images:
+    for img_name, bbox_img, crops in test_processed_pics:
         if img_name == selected_image:
             st.image(bbox_img, caption="Original Image with Bounding Boxes", use_column_width=True)
             st.subheader("Cropped Objects:")
