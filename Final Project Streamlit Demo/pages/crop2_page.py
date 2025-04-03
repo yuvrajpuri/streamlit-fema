@@ -168,13 +168,13 @@ if test_processed_pics:
 
     for img_name, bbox_img, crops in test_processed_pics:
         if img_name == selected_image:
-            st.image(bbox_img, caption="Original Image with Bounding Boxes", use_column_width=True)
+            st.image(bbox_img, caption="Original Image with Bounding Boxes", use_container_width=True)
             st.subheader("Cropped Objects:")
             cols = st.columns(min(len(crops), 4))  # Display up to 4 per row
 
             for i, crop in enumerate(crops):
                 with cols[i % 4]:
-                    st.image(crop, caption=f"Crop {i+1}", use_column_width=True)
+                    st.image(crop, caption=f"Crop {i+1}", use_container_width=True)
 else:
     st.warning("No processed images found.")
 
