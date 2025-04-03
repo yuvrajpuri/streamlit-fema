@@ -90,11 +90,18 @@ def crop_and_save(image_path, bbox, output_path):
 def draw_bounding_boxes(image_path, bboxes, output_path):
     image = Image.open(image_path)
     draw = ImageDraw.Draw(image)
-    for bbox in bboxes:
+    for bbox, category_id in bboxes:
         left, upper, width, height = bbox
         right = left + width
         lower = upper + height
-        draw.rectangle([left, upper, right, lower], outline="red", width=2)
+
+        # Color of bounding box
+        color = "red"
+        if category_id == 1:
+            color = "purple"
+        elif category_id == 2:
+            color = "yellow"
+        draw.rectangle([left, upper, right, lower], outline=color, width=2)
     image.save(output_path)
 
 # Function to process a single directory
@@ -114,13 +121,15 @@ def process_directory2(source_dir):
     # Dictionary to group bounding boxes by image_id
     image_bboxes = {}
 
+
     # Iterate over annotations and group bounding boxes by image_id
     for annotation in data['annotations']:
         image_id = annotation['image_id']
         bbox = annotation['bbox']
+        cat_id = annotation['category_id']
         if image_id not in image_bboxes:
             image_bboxes[image_id] = []
-        image_bboxes[image_id].append(bbox)
+        image_bboxes[image_id].append((bbox, cat_id))
 
     # Make a list to contain the whole processed images
     processed_images = []
