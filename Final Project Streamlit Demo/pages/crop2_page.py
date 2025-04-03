@@ -5,48 +5,177 @@ import cv2
 import json
 import sys
 import streamlit as st
-from PIL import Image
+import re
+from PIL import Image, ImageDraw
 
 st.header("Cropping Tool Example")
 st.write("Here is where we will showcase the cropping tool developed by another teammate.")
 
+# Part 1: Initial variables and Methods
 
-# Add the "CSCI_E-599a-Bounding_Box_Cropping" folder to sys.path
-os.chdir(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping", "source data"))
+# Variables
 
-# Import existing script
-# FIXED: The fix is to rename the file for the test. 
-import test_600x600  
+# Base directory
+source_base_dir = "../source"  # Base directory for source data
 
-# File paths (Assume pre-existing files)
-# Current error: file not found. Updating the path.
-# Error found: the file self calls the image paths within the local directory - i.e. "imagexxxx.png". Need to change the local directory first.
-# Use the sys path append.
-# UPDATE: move the test_600x600.py that was renamed to the source data directory.
+# JSON file name
+json_file_name = "_annotations.coco.json"
 
-print(os.getcwd())
-IMAGE_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.png"
-JSON_PATH = "CSCI_E-599a-Bounding_Box_Cropping/source data/image_00191.json"
-OUTPUT_DIR = "cropped_objects"
+# Function to process a single directory
+def process_directory(source_dir):
+    json_path = os.path.join(source_dir, json_file_name)
+    output_json_path = json_path  # Save the updated JSON in the same directory
 
-# Ensure output directory exists
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+    # Read the original COCO JSON file
+    with open(json_path, "r") as f:
+        coco_data = json.load(f)
 
-# Run the existing script automatically
-st.title("Bounding Box Cropping Results")
-st.subheader("Original Image")
-st.image(IMAGE_PATH, caption="Original Image", use_column_width=True)
+    # Get list of images in the source directory (long names)
+    image_files = {img for img in os.listdir(source_dir) if img.lower().endswith(('.jpg', '.jpeg', '.png'))}
 
-st.subheader("Running the Cropping Program...")
+    # Create a mapping dictionary long names -> short names
+    name_mapping = {}
 
-sys.path.append(os.path.join(os.getcwd(), "CSCI_E-599a-Bounding_Box_Cropping", "source data"))
-test_600x600.crop_bounding_boxes(IMAGE_PATH, JSON_PATH, OUTPUT_DIR)
+    for img_name in image_files:
+        # Extract the main identifier from the short name (example: "image_00003")
+        base_name_match = re.match(r"(image_\d+)", img_name)
+        if base_name_match:
+            base_name = base_name_match.group(1) + ".jpg"  # Desired short format
+            name_mapping[img_name] = base_name
 
-# Display cropped images
-st.subheader("Cropped Objects")
-cropped_files = sorted([os.path.join(OUTPUT_DIR, f) for f in os.listdir(OUTPUT_DIR) if f.endswith(".png")])
+    # Rename files in the source directory
+    for old_name, new_name in name_mapping.items():
+        old_path = os.path.join(source_dir, old_name)
+        new_path = os.path.join(source_dir, new_name)
+        os.rename(old_path, new_path)
 
-for file in cropped_files:
-    st.image(file, caption=os.path.basename(file), use_container_width=False)
+    # Filter images and update names in the JSON
+    filtered_images = []
+    for img in coco_data["images"]:
+        if img["file_name"] in name_mapping:
+            img["file_name"] = name_mapping[img["file_name"]]  # Replace with the short name
+            filtered_images.append(img)
 
-st.success("Processing Complete! All images displayed.")
+    # Get the IDs of the selected images
+    selected_image_ids = {img["id"] for img in filtered_images}
+
+    # Filter annotations related to the selected images
+    filtered_annotations = [ann for ann in coco_data["annotations"] if ann["image_id"] in selected_image_ids]
+
+    # Create the new JSON with corrected names
+    filtered_coco = {
+        "images": filtered_images,
+        "annotations": filtered_annotations,
+        "categories": coco_data["categories"]  # Keep original categories
+    }
+
+    # Save the new JSON in the same directory
+    with open(output_json_path, "w") as f:
+        json.dump(filtered_coco, f, indent=4)
+
+    print(f"✅ Files renamed and new JSON saved at: {output_json_path}")
+
+
+# Processing images
+# Function to crop and save images
+def crop_and_save(image_path, bbox, output_path):
+    image = Image.open(image_path)
+    left, upper, width, height = bbox
+    right = left + width
+    lower = upper + height
+    cropped_image = image.crop((left, upper, right, lower))
+    cropped_image.save(output_path)
+
+# Function to draw bounding boxes on the image and save it
+def draw_bounding_boxes(image_path, bboxes, output_path):
+    image = Image.open(image_path)
+    draw = ImageDraw.Draw(image)
+    for bbox in bboxes:
+        left, upper, width, height = bbox
+        right = left + width
+        lower = upper + height
+        draw.rectangle([left, upper, right, lower], outline="red", width=2)
+    image.save(output_path)
+
+# Function to process a single directory
+def process_directory2(source_dir):
+    json_path = os.path.join(source_dir, json_file_name)
+    processed_dir = os.path.join(source_dir, 'processed')
+    os.makedirs(processed_dir, exist_ok=True)
+
+    # Load annotations from the JSON file
+    with open(json_path, 'r') as f:
+        data = json.load(f)
+
+    # Create a dictionary to map image_id to file_name
+    image_id_to_filename = {image['id']: image['file_name'] for image in data['images']}
+
+    # Dictionary to group bounding boxes by image_id
+    image_bboxes = {}
+
+    # Iterate over annotations and group bounding boxes by image_id
+    for annotation in data['annotations']:
+        image_id = annotation['image_id']
+        bbox = annotation['bbox']
+        if image_id not in image_bboxes:
+            image_bboxes[image_id] = []
+        image_bboxes[image_id].append(bbox)
+
+    # Make a list to contain the whole processed images
+    processed_images = []
+    
+    # Iterate over images and process them
+    for image_id, bboxes in image_bboxes.items():
+        image_filename = image_id_to_filename[image_id]
+        image_path = os.path.join(source_dir, image_filename)
+        
+        # Save the image with bounding boxes drawn
+        output_path_with_boxes = os.path.join(processed_dir, f"{os.path.splitext(image_filename)[0]}_with_boxes.jpg")
+        draw_bounding_boxes(image_path, bboxes, output_path_with_boxes)
+
+        # Make a list to hold the cropped images
+        cropped_pics = []
+        
+        # Crop and save each bounding box individually
+        for i, bbox in enumerate(bboxes):
+            output_path = os.path.join(processed_dir, f"{os.path.splitext(image_filename)[0]}_crop_{i}.jpg")
+            crop_and_save(image_path, bbox, output_path)
+            cropped_images.append(output_path)
+
+        # Make the final returnable list
+        processed_images.append((image_filename, output_path_with_boxes, cropped_images))
+
+        #print(f"Processed {image_filename} with {len(bboxes)} bounding boxes")
+
+    return processed_images
+
+# Part 2: Processing and Cropping the Images
+# Target only the 'test' subdirectory
+test_dir = os.path.join(source_base_dir, "test")
+
+# Check if 'test' directory exists before processing
+if os.path.isdir(test_dir):
+    process_directory(test_dir)
+else:
+    print(f"Test directory not found: {test_dir}")
+
+# Crop
+test_processed_pics = process_directory2(test_dir)
+
+if test_processed_pics:
+    image_options = [img[0] for img in test_processed_pics]
+    selected_image = st.selectbox("Select an image", image_options)
+
+    for img_name, bbox_img, crops in processed_images:
+        if img_name == selected_image:
+            st.image(bbox_img, caption="Original Image with Bounding Boxes", use_column_width=True)
+            st.subheader("Cropped Objects:")
+            cols = st.columns(min(len(crops), 4))  # Display up to 4 per row
+
+            for i, crop in enumerate(crops):
+                with cols[i % 4]:
+                    st.image(crop, caption=f"Crop {i+1}", use_column_width=True)
+else:
+    st.warning("No processed images found.")
+
+
