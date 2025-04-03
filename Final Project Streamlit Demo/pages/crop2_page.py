@@ -140,7 +140,7 @@ def process_directory2(source_dir):
         for i, bbox in enumerate(bboxes):
             output_path = os.path.join(processed_dir, f"{os.path.splitext(image_filename)[0]}_crop_{i}.jpg")
             crop_and_save(image_path, bbox, output_path)
-            cropped_images.append(output_path)
+            cropped_pics.append(output_path)
 
         # Make the final returnable list
         processed_images.append((image_filename, output_path_with_boxes, cropped_images))
