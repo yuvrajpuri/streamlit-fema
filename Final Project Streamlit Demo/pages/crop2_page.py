@@ -148,7 +148,7 @@ def process_directory2(source_dir):
         
         # Crop and save each bounding box individually
         for i, bbox in enumerate(bboxes):
-            output_path = os.path.join(processed_dir, f"{os.path.splitext(image_filename)[0]}_crop_{i}_cat{bbox[1]}.jpg")
+            output_path = os.path.join(processed_dir, f"{os.path.splitext(image_filename)[0]}_crop_{i}_cat_{bbox[1]}.jpg")
             crop_and_save(image_path, bbox[0], output_path)
             cropped_pics.append(output_path)
 
@@ -187,9 +187,9 @@ if test_processed_pics:
                 filename = os.path.basename(crop)
 
                 # Determine the appropriate caption based on filename
-                if filename.endswith("cat1.jpg"):
+                if filename.endswith("cat_1.jpg"):
                     caption = "Affected Building"
-                elif filename.endswith("cat2.jpg"):
+                elif filename.endswith("cat_2.jpg"):
                     caption = "Major Damage"
                 else:
                     caption = f"Crop {i+1}
