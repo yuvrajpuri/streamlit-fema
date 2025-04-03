@@ -192,7 +192,7 @@ if test_processed_pics:
                 elif filename.endswith("cat_2.jpg"):
                     caption = "Major Damage"
                 else:
-                    caption = f"Crop {i+1}
+                    caption = f"Crop {i+1}"
                 with cols[i % 4]:
                     st.image(crop, caption=caption, use_container_width=True)
 else:
