@@ -151,16 +151,16 @@ def process_directory2(source_dir):
 
 # Part 2: Processing and Cropping the Images
 # Target only the 'test' subdirectory
-test_dir = os.path.join(source_base_dir, "test")
+train_dir = os.path.join(source_base_dir, "train")
 
 # Check if 'test' directory exists before processing
-if os.path.isdir(test_dir):
-    process_directory(test_dir)
+if os.path.isdir(train_dir):
+    process_directory(train_dir)
 else:
-    print(f"Test directory not found: {test_dir}")
+    print(f"Test directory not found: {train_dir}")
 
 # Crop
-test_processed_pics = process_directory2(test_dir)
+test_processed_pics = process_directory2(train_dir)
 
 if test_processed_pics:
     image_options = [img[0] for img in test_processed_pics]
