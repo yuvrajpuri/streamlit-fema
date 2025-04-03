@@ -98,6 +98,7 @@ def draw_bounding_boxes(image_path, bboxes, output_path):
     image.save(output_path)
 
 # Function to process a single directory
+@st.cache_resource
 def process_directory2(source_dir):
     json_path = os.path.join(source_dir, json_file_name)
     processed_dir = os.path.join(source_dir, 'processed')
