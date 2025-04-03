@@ -143,7 +143,7 @@ def process_directory2(source_dir):
             cropped_pics.append(output_path)
 
         # Make the final returnable list
-        processed_images.append((image_filename, output_path_with_boxes, cropped_images))
+        processed_images.append((image_filename, output_path_with_boxes, cropped_pics))
 
         #print(f"Processed {image_filename} with {len(bboxes)} bounding boxes")
 
