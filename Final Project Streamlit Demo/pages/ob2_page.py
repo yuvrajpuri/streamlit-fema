@@ -30,11 +30,40 @@ if insert_file is not None:
     st.image(pic, caption="Uploaded Image", use_container_width=True)
 
     if st.button("Run Inference"):
-        with st.spinner("Detecting..."):
+        with st.spinner("Running inference..."):
             results = model(pic, device=DEVICE)
+            result = results[0]
 
-            # Get image with boxes (BGR -> RGB)
-            result_array = results[0].plot()
-            result_image = Image.fromarray(result_array[..., ::-1])  # Convert BGR to RGB
+            # Display image with detections
+            plotted_img = result.plot()
+            result_image = Image.fromarray(plotted_img[..., ::-1])  # BGR to RGB
+            st.image(result_image, caption="Detection Results", use_container_width=True)
 
-            st.image(result_image, caption="Detection Results", use_column_width=True)
+            # Show detection results in a table
+            boxes = result.boxes
+            if boxes and boxes.xyxy is not None and len(boxes) > 0:
+                # Extract data
+                xyxy = boxes.xyxy.cpu().numpy()
+                conf = boxes.conf.cpu().numpy()
+                cls = boxes.cls.cpu().numpy()
+                names = result.names
+
+                # Build DataFrame
+                detections = []
+                for i in range(len(xyxy)):
+                    x1, y1, x2, y2 = xyxy[i]
+                    detections.append({
+                        "Class": names[int(cls[i])],
+                        "Confidence": round(float(conf[i]), 3),
+                        "X1": int(x1),
+                        "Y1": int(y1),
+                        "X2": int(x2),
+                        "Y2": int(y2)
+                    })
+
+                df = pd.DataFrame(detections)
+                st.subheader("Detected Objects")
+                st.dataframe(df, use_container_width=True)
+            else:
+                st.subheader("Detected Objects")
+                st.write("🔍 None found.")
