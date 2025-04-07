@@ -21,7 +21,7 @@ model, DEVICE = load_model()
 
 # User interface - the title and the guiding text.
 st.title("YOLOv11 Object Detection (Sample)")
-st.write("Upload an image and detect objects using your trained YOLOv11 model.")
+st.write("Upload an image and detect disaster damage using a trained YOLOv11 model.")
 
 # Upload image
 insert_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
