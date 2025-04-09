@@ -5,3 +5,4 @@ tensorflow
 ultralytics
 transformers
 streamlit_extras
+python-dotenv
