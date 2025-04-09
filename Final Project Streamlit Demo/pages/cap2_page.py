@@ -5,8 +5,10 @@ import torch
 from streamlit_extras.mention import mention
 from streamlit_extras.buy_me_a_coffee import button
 import os
+from dotenv import load_dotenv
 
-HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN") or "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"
+load_dotenv()
+HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
 @st.cache_resource(show_spinner="Loading model...")
 def load_model():
