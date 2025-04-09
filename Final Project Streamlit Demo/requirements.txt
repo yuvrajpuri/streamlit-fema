@@ -4,3 +4,4 @@ EXIF
 tensorflow
 ultralytics
 transformers
+streamlit_extras
