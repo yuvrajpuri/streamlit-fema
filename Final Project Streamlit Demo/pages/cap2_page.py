@@ -30,7 +30,6 @@ def generate_caption_from_bytes(img_bytes: bytes) -> str:
     return caption
 
 # Streamlit page
-st.set_page_config(page_title="PaliGemma AI Captioning", page_icon="🧠")
 st.title("🧠 Image Captioning with PaliGemma")
 st.caption("Experience the power of Google's multimodal language model.")
 
