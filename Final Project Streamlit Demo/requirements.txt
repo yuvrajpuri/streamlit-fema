@@ -3,3 +3,4 @@ striprtf
 EXIF
 tensorflow
 ultralytics
+transformers
