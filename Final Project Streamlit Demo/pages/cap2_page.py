@@ -4,11 +4,14 @@ from PIL import Image
 import torch
 from streamlit_extras.mention import mention
 from streamlit_extras.buy_me_a_coffee import button
+import os
+
+HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN") or "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"
 
 @st.cache_resource(show_spinner="Loading model...")
 def load_model():
-    processor = PaliGemmaProcessor.from_pretrained("google/paligemma2-3b-pt-224", trust_remote_code=True)
-    model = PaliGemmaForConditionalGeneration.from_pretrained("google/paligemma2-3b-pt-224", device_map="auto")
+    processor = PaliGemmaProcessor.from_pretrained("google/paligemma2-3b-pt-224", trust_remote_code=True, token = HF_TOKEN)
+    model = PaliGemmaForConditionalGeneration.from_pretrained("google/paligemma2-3b-pt-224", device_map="auto", token = HF_TOKEN)
     return processor, model
 
 processor, model = load_model()
