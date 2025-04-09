@@ -16,7 +16,6 @@ def load_model():
 
 processor, model = load_model()
 
-@st.cache_data(show_spinner=False)
 def generate_caption_from_bytes(img_bytes: bytes) -> str:
     image = Image.open(img_bytes).convert("RGB")
     # image = preprocess_image(image)
@@ -24,7 +23,7 @@ def generate_caption_from_bytes(img_bytes: bytes) -> str:
     inputs = processor(text=prompt, images=image, return_tensors="pt").to(model.device)
 
     with torch.no_grad():
-        outputs = model.generate(**inputs, max_new_tokens=64)
+        outputs = model.generate(**inputs, max_new_tokens=32)
 
     caption = processor.batch_decode(outputs, skip_special_tokens=True)[0]
     return caption
@@ -46,7 +45,7 @@ with st.expander("About this app"):
 uploaded_file = st.file_uploader("Upload a cropped image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+    st.image(uploaded_file, caption="Uploaded Image", use_container_width=True)
 
     with st.spinner("Generating caption using PaliGemma..."):
         caption = generate_caption_from_bytes(uploaded_file)
