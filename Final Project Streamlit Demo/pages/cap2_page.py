@@ -19,7 +19,7 @@ processor, model = load_model()
 @st.cache_data(show_spinner=False)
 def generate_caption_from_bytes(img_bytes: bytes) -> str:
     image = Image.open(img_bytes).convert("RGB")
-    image = preprocess_image(image)
+    # image = preprocess_image(image)
     prompt = "<image> answer en "
     inputs = processor(text=prompt, images=image, return_tensors="pt").to(model.device)
 
