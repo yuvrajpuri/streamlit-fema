@@ -21,7 +21,9 @@ crop2_page = st.Page("pages/crop2_page.py", title = "Cropping Tool Examples")
 # Edit : adding a test object detection page for utilizing the YOLO model we have developed
 ob2_page = st.Page("pages/ob2_page.py", title = "Object Detection (example)")
 
-pg = st.navigation([main_page, ob_page, cap_page, crop_page, geo_page, fin_page, ob2_page, crop2_page])
+cap2_page = st.Page("pages/cap2_page.py", title = "Captioning in Streamlit (PaliGemma)")
+
+pg = st.navigation([main_page, ob_page, cap_page, crop_page, geo_page, fin_page, ob2_page, crop2_page, cap2_page])
 
 # Run the selected page
 pg.run()
