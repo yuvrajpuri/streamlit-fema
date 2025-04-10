@@ -33,7 +33,7 @@ def get_gps_coordinates(image_path):
     return None, None
 
 
-image_folder = "sample_images_for_inference"
+image_folder = "pages/source/train"
 
 # Find all .jpg images in the folder
 image_files = [f for f in os.listdir(image_folder) if f.endswith(".jpg")]
