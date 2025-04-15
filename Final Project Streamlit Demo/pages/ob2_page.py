@@ -100,17 +100,17 @@ if insert_file is not None:
                     })
 
                     # Annotations information
-#                    ann_det.append({
-#                        "filename": insert_file.name,
-#                        "xmin": x1,
-#                        "ymin": y1,
-#                        "xmax": x2,
-#                        "ymax": y2,
-#                        "class": category_name,
-#                    })
+                    ann_det.append({
+                        "filename": insert_file.name,
+                        "xmin": x1,
+                        "ymin": y1,
+                        "xmax": x2,
+                        "ymax": y2,
+                        "class": category_name,
+                    })
 
                 df = pd.DataFrame(detections)
-#                ann_df = pd.DataFrame(ann_det)
+                ann_df = pd.DataFrame(ann_det)
 
                 # Add bbox column in COCO format: [x, y, width, height]
 #                ann_df["bbox"] = ann_df.apply(
