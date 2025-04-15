@@ -7,7 +7,7 @@ import numpy as np
 import os
 
 # Needed for COCO annotation generation
-from pylabel import importer
+from pylabel import LabelDataset
 import uuid
 from datetime import datetime
 
@@ -106,10 +106,9 @@ if insert_file is not None:
                     axis=1
                 )
 
-                # Use pylabel to create dataset from the annotations dataset
-                dataset = importer.ImportYOLOv5(
-                    path=None,
-                    df=ann_df,
+
+                dataset = LabelDataset(
+                    labels=ann_df,
                     path_to_images=None
                 )
                 
