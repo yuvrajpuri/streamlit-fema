@@ -14,6 +14,9 @@ from datetime import datetime
 # Absolute path to the model in Colab - assuming its been pre-uploaded. Need to adjust for a better solution.
 MODEL_PATH = "/content/best.pt"
 
+assert os.path.exists(MODEL_PATH), "Model file not found!"
+
+
 # Load model once
 @st.cache_resource
 def load_model():
