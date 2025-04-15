@@ -106,11 +106,8 @@ if insert_file is not None:
                     axis=1
                 )
 
-                #dataset = importer.ImportYOLOv5(path=None, df=ann_df, path_to_images=None)
-                dataset = LabelDataset(
-                    labels=ann_df,
-                    path_to_images=None
-                )
+                # dataset = importer.ImportYOLOv5(path=None, df=ann_df, path_to_images=None)
+                
                 
                 # Manually set category map 
                 dataset.df["cat_id"] = dataset.df["class"].map(CATEGORY_MAP)
