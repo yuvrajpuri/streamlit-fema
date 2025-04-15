@@ -120,7 +120,7 @@ if insert_file is not None:
                 
                 
                 # Manually set category map 
-                dataset.df["cat_id"] = dataset.df["class"].map(CATEGORY_MAP)
+                #dataset.df["cat_id"] = dataset.df["class"].map(CATEGORY_MAP)
                 
                 # Export annotations dataset to COCO
                 #coco_json_path = f"{insert_file.name}_coco.json"
