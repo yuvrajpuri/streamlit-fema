@@ -100,6 +100,12 @@ if insert_file is not None:
                 df = pd.DataFrame(detections)
                 ann_df = pd.DataFrame(ann_det)
 
+                # Add bbox column in COCO format: [x, y, width, height]
+                ann_df["bbox"] = ann_df.apply(
+                    lambda row: [row["xmin"], row["ymin"], row["xmax"] - row["xmin"], row["ymax"] - row["ymin"]],
+                    axis=1
+                )
+
                 # Use pylabel to create dataset from the annotations dataset
                 dataset = importer.ImportYOLOv5(
                     path=None,
