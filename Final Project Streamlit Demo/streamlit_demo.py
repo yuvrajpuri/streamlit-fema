@@ -16,12 +16,12 @@ ex_page = st.Page("pages/ex_page.py", title = "Example Object Detection")
 # Edit : adding a test example page for trying to use Cropping tool
 # crop2_page = st.Page("pages/crop2_page.py", title = "Cropping Tool Examples")
 
-crop3_page = st.Page("pages/crop3_page.py", title = "Cropping using Uploaded Images")
+crop3_page = st.Page("pages/crop_nococo_page.py", title = "Cropping using Uploaded Images")
 
 # Note: does not have the implementation yet to account for cropping an image selected yet. 
 
 # Edit : adding a test object detection page for utilizing the YOLO model we have developed
-ob2_page = st.Page("pages/ob2_page.py", title = "Object Detection (example)")
+ob2_page = st.Page("pages/ob_nococo_page.py", title = "Object Detection (example)")
 
 # cap2_page = st.Page("pages/cap2_page.py", title = "Captioning in Streamlit (PaliGemma)")
 
