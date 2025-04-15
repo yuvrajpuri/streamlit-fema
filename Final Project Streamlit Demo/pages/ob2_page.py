@@ -7,7 +7,7 @@ import numpy as np
 import os
 
 # Needed for COCO annotation generation
-from pylabel import LabelDataset, importer
+from pylabel import importer
 import uuid
 from datetime import datetime
 
@@ -72,7 +72,7 @@ if insert_file is not None:
 
                 # 2. Annotations list "detections"
                 ann_det = []
-                
+                session_detections = []
                 for i in range(len(xyxy)):
                     # Coordinates for bounding boxes - used for display and annotations
                     x1, y1, x2, y2 = xyxy[i]
@@ -89,53 +89,63 @@ if insert_file is not None:
                         "X2": int(x2),
                         "Y2": int(y2)
                     })
+                     # Calculate width and height
+                    width_box = x2 - x1
+                    height_box = y2 - y1
+                    category_id = CATEGORY_MAP[category_name]  # Same map as before
 
-                    # Annotations information
-                    ann_det.append({
-                        "filename": insert_file.name,
-                        "xmin": x1,
-                        "ymin": y1,
-                        "xmax": x2,
-                        "ymax": y2,
-                        "class": category_name,
+                    session_detections.append({
+                        "bbox": [int(x1), int(y1), int(width_box), int(height_box)],
+                        "category_id": category_id
                     })
 
+                    # Annotations information
+#                    ann_det.append({
+#                        "filename": insert_file.name,
+#                        "xmin": x1,
+#                        "ymin": y1,
+#                        "xmax": x2,
+#                        "ymax": y2,
+#                        "class": category_name,
+#                    })
+
                 df = pd.DataFrame(detections)
-                ann_df = pd.DataFrame(ann_det)
+#                ann_df = pd.DataFrame(ann_det)
 
                 # Add bbox column in COCO format: [x, y, width, height]
-                ann_df["bbox"] = ann_df.apply(
-                    lambda row: [row["xmin"], row["ymin"], row["xmax"] - row["xmin"], row["ymax"] - row["ymin"]],
-                    axis=1
-                )
+#                ann_df["bbox"] = ann_df.apply(
+#                    lambda row: [row["xmin"], row["ymin"], row["xmax"] - row["xmin"], row["ymax"] - row["ymin"]],
+#                    axis=1
+#                )
 
                 # dataset = importer.ImportYOLOv5(path=None, df=ann_df, path_to_images=None)
                 
                 
                 # Manually set category map 
-                dataset.df["cat_id"] = dataset.df["class"].map(CATEGORY_MAP)
+#                dataset.df["cat_id"] = dataset.df["class"].map(CATEGORY_MAP)
                 
                 # Export annotations dataset to COCO
-                coco_json_path = f"{insert_file.name}_coco.json"
-                dataset.export.ExportToCoco(coco_json_path)
+#                coco_json_path = f"{insert_file.name}_coco.json"
+#                dataset.export.ExportToCoco(coco_json_path)
 
                 # Create a path to re-utilize the same COCO annotations and Image we uploaded for cropping
-                with open(coco_json_path, "r") as f:
-                    coco_json_str = f.read()
+#                with open(coco_json_path, "r") as f:
+#                    coco_json_str = f.read()
 
-                st.success("COCO annotation created!")
+#                st.success("COCO annotation created!")
 
                 # Downloadable COCO annotations (use for debugging)
-                st.download_button(
-                    label="Download COCO JSON",
-                    data=coco_json_str,
-                    file_name=coco_json_path,
-                    mime="application/json"
-                )
+#                st.download_button(
+#                    label="Download COCO JSON",
+#                    data=coco_json_str,
+#                    file_name=coco_json_path,
+#                    mime="application/json"
+#                )
 
                 # Save COCO annotations that we generated to the session_state. This way we don't have to search for an image and annotations file
                 st.session_state["last_uploaded_image"] = pic
-                st.session_state["last_annotations"] = json.loads(coco_json_str)
+#                st.session_state["last_annotations"] = json.loads(coco_json_str)
+                st.session_state["last_detections"] = session_detections
 
                 # Show the dataframe that has the displayable detections
                 st.subheader("Detected Objects")
