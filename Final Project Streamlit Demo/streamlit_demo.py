@@ -14,7 +14,7 @@ fin_page = st.Page("pages/fin_page.py", title = "Final Output")
 # crop2_page = st.Page("pages/crop2_page.py", title = "Cropping Tool Examples")
 
 # crop3_page = st.Page("pages/crop3_page.py", title = "Cropping using Uploaded Images")
-crop_nococo_page = St.Page("pages/crop_nococo_page.py", title = "Cropping without JSON")
+crop_nococo_page = st.Page("pages/crop_nococo_page.py", title = "Cropping without JSON")
 
 # Note: does not have the implementation yet to account for cropping an image selected yet. 
 
