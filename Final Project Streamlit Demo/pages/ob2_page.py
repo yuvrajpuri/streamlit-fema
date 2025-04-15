@@ -116,33 +116,33 @@ if insert_file is not None:
                     axis=1
                 )
 
-                dataset = importer.ImportYOLOv5(path=None, df=ann_df, path_to_images=None)
+                #dataset = importer.ImportYOLOv5(path=None, df=ann_df, path_to_images=None)
                 
                 
                 # Manually set category map 
                 dataset.df["cat_id"] = dataset.df["class"].map(CATEGORY_MAP)
                 
                 # Export annotations dataset to COCO
-                coco_json_path = f"{insert_file.name}_coco.json"
-                dataset.export.ExportToCoco(coco_json_path)
+                #coco_json_path = f"{insert_file.name}_coco.json"
+                #dataset.export.ExportToCoco(coco_json_path)
 
                 # Create a path to re-utilize the same COCO annotations and Image we uploaded for cropping
-                with open(coco_json_path, "r") as f:
-                    coco_json_str = f.read()
+                #with open(coco_json_path, "r") as f:
+                #    coco_json_str = f.read()
 
-                st.success("COCO annotation created!")
+                #st.success("COCO annotation created!")
 
                 # Downloadable COCO annotations (use for debugging)
-                st.download_button(
-                    label="Download COCO JSON",
-                    data=coco_json_str,
-                    file_name=coco_json_path,
-                    mime="application/json"
-                )
+                #st.download_button(
+                    #label="Download COCO JSON",
+                    #data=coco_json_str,
+                    #file_name=coco_json_path,
+                    #mime="application/json"
+                #)
 
                 # Save COCO annotations that we generated to the session_state. This way we don't have to search for an image and annotations file
                 st.session_state["last_uploaded_image"] = pic
-                st.session_state["last_annotations"] = json.loads(coco_json_str)
+                #st.session_state["last_annotations"] = json.loads(coco_json_str)
                 st.session_state["last_detections"] = session_detections
 
                 # Show the dataframe that has the displayable detections
