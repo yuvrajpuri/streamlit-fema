@@ -66,7 +66,7 @@ def build_coco_json(image_name, width, height, detections, category_map, picture
             "category_id": det["category_id"],
             "bbox": [x, y, w, h],
             "area": w * h,
-            "segmentation":[]
+            "segmentation":[],
             "iscrowd": 0
         })
 
