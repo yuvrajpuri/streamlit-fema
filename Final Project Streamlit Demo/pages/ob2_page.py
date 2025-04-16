@@ -41,7 +41,7 @@ def get_date_captured(pil_image):
     return datetime.now().isoformat()
 
 # helper function to build the COCO that we obtain. it's barebones, focused on 1 image at a time
-def build_coco_json(image_name, width, height, detections, category_map, picture):
+def build_coco_json(image_name, width, height, detections, picture):
     """
     detections: list of dicts, each with:
         {
