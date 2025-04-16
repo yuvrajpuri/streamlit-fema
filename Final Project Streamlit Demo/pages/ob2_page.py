@@ -41,7 +41,7 @@ def get_date_captured(pil_image):
     return datetime.now().isoformat()
 
 # helper function to build the COCO that we obtain. it's barebones, focused on 1 image at a time
-def build_coco_json(image_name, width, height, detections, category_map):
+def build_coco_json(image_name, width, height, detections, category_map, picture):
     """
     detections: list of dicts, each with:
         {
@@ -71,7 +71,7 @@ def build_coco_json(image_name, width, height, detections, category_map):
         })
 
     # for loop making the annotations complete, lets make the COCO
-    date_data = get_date_captured(pic)
+    date_data = get_date_captured(picture)
     coco = {
         "images": [{
             "id": image_id,
@@ -179,7 +179,7 @@ if insert_file is not None:
 
                 df = pd.DataFrame(detections)
 
-                coco_json = build_coco_json(pic_name, width, height, session_detections)
+                coco_json = build_coco_json(pic_name, width, height, session_detections, pic)
                 coco_json_str = json.dumps(coco_json, indent=2)
 
                 # Show the dataframe that has the displayable detections
