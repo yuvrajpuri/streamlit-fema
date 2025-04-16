@@ -187,23 +187,23 @@ if insert_file is not None:
                 st.subheader("Detected Objects")
                 st.dataframe(df, use_container_width=True)
 
-                st.subheader("COCO JSON Preview (Annotations Only)")
-                st.dataframe(pd.DataFrame(ann_det), use_container_width=True)
+                #st.subheader("COCO JSON Preview (Annotations Only)")
+                #st.dataframe(pd.DataFrame(ann_det), use_container_width=True)
                 
-                #st.success("COCO annotation created!")
+                st.success("COCO annotation created!")
 
                 # Downloadable COCO annotations (use for debugging)
-                #st.download_button(
-                    #label="Download COCO JSON",
-                    #data=coco_json_str,
-                    #file_name=coco_json_path,
-                    #mime="application/json"
-                #)
+                st.download_button(
+                    label="Download COCO JSON",
+                    data=coco_json_str,
+                    file_name=coco_json_path,
+                    mime="application/json"
+                )
 
                 # Save COCO annotations that we generated to the session_state. This way we don't have to search for an image and annotations file
                 st.session_state["last_uploaded_image"] = pic
-                #st.session_state["last_annotations"] = json.loads(coco_json_str)
                 st.session_state["last_detections"] = session_detections
+                st.session_state["last_annotations"] = coco_json
 
 
             else:
