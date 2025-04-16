@@ -7,9 +7,12 @@ import numpy as np
 import os
 
 # Needed for COCO annotation generation
-from pylabel import importer
 import uuid
 from datetime import datetime
+
+# After loading image via PIL
+from datetime import datetime
+from PIL.ExifTags import TAGS
 
 # Absolute path to the model in Colab - assuming its been pre-uploaded. Need to adjust for a better solution.
 MODEL_PATH = "/content/best.pt"
@@ -24,6 +27,71 @@ def load_model():
     return model, device
 
 model, DEVICE = load_model()
+
+# helper function to observe EXIF metadata for the date the image was captured. defaults to today if none
+def get_date_captured(pil_image):
+    try:
+        exif = pil_image._getexif()
+        if exif is not None:
+            for tag, value in exif.items():
+                if TAGS.get(tag) == "DateTimeOriginal":
+                    return datetime.strptime(value, "%Y:%m:%d %H:%M:%S").isoformat()
+    except Exception:
+        pass
+    return datetime.now().isoformat()
+
+# helper function to build the COCO that we obtain. it's barebones, focused on 1 image at a time
+def build_coco_json(image_name, width, height, detections, category_map):
+    """
+    detections: list of dicts, each with:
+        {
+            "bbox": [x, y, width, height],
+            "category_id": int
+        }
+    """
+    
+    # default image id for a singular image uploaded - i.e. the image that we get the crops from
+    image_id=1
+
+    # for the annotations portion of the COCO JSON
+    annotations=[]
+
+    # x & y are starting initial coordinate for the bounding box
+    # w and h are "width" and "height" of the bounding box
+    for idx, det in enumerate(detections):
+        x, y, w, h = det["bbox"]
+        annotations.append({
+            "id": idx,
+            "image_id": image_id,
+            "category_id": det["category_id"],
+            "bbox": [x, y, w, h],
+            "area": w * h,
+            "segmentation":[]
+            "iscrowd": 0
+        })
+
+    # for loop making the annotations complete, lets make the COCO
+    date_data = get_date_captured(pic)
+    coco = {
+        "images": [{
+            "id": image_id,
+            "file_name": image_name,
+            "width": width,
+            "height": height,
+            "date_captured": date_data
+        }],
+        "annotations": annotations,
+        "categories": [
+            {"id": 1, "name": "Affected building"},
+            {"id": 2, "name": "Major damage"}
+        ]
+    }
+
+    return coco
+
+
+    
+    
 
 # User interface - the title and the guiding text.
 st.title("YOLOv11 Object Detection (Sample)")
@@ -65,12 +133,17 @@ if insert_file is not None:
 
                 # Build DataFrame and usage for making annotations
                 
-                # 1. Display "detections" 
+                # 1. Display "detections" + showing on the cropping page
                 detections = []
-
-                # 2. Annotations list "detections"
-                ann_det = []
                 session_detections = []
+                
+                # 2. Annotations list "detections" for JSON
+                ann_det = []
+
+                # For build_coco_json helper function
+                width, height = pic.size
+                pic_name = insert_file.name
+                
                 for i in range(len(xyxy)):
                     # Coordinates for bounding boxes - used for display and annotations
                     x1, y1, x2, y2 = xyxy[i]
@@ -99,37 +172,23 @@ if insert_file is not None:
 
                     # Annotations information
                     ann_det.append({
-                        "filename": insert_file.name,
-                        "xmin": x1,
-                        "ymin": y1,
-                        "xmax": x2,
-                        "ymax": y2,
-                        "class": category_name,
+                        "category_id": category_id,
+                        "bbox": [int(x1), int(y1), int(width_box), int(height_box)],
+                        "area": int(width_box * height_box)
                     })
 
                 df = pd.DataFrame(detections)
-                ann_df = pd.DataFrame(ann_det)
 
-                # Add bbox column in COCO format: [x, y, width, height]
-                ann_df["bbox"] = ann_df.apply(
-                    lambda row: [row["xmin"], row["ymin"], row["xmax"] - row["xmin"], row["ymax"] - row["ymin"]],
-                    axis=1
-                )
+                coco_json = build_coco_json(pic_name, width, height, session_detections)
+                coco_json_str = json.dumps(coco_json, indent=2)
 
-                #dataset = importer.ImportYOLOv5(path=None, df=ann_df, path_to_images=None)
+                # Show the dataframe that has the displayable detections
+                st.subheader("Detected Objects")
+                st.dataframe(df, use_container_width=True)
+
+                st.subheader("COCO JSON Preview (Annotations Only)")
+                st.dataframe(pd.DataFrame(ann_det), use_container_width=True)
                 
-                
-                # Manually set category map 
-                #dataset.df["cat_id"] = dataset.df["class"].map(CATEGORY_MAP)
-                
-                # Export annotations dataset to COCO
-                #coco_json_path = f"{insert_file.name}_coco.json"
-                #dataset.export.ExportToCoco(coco_json_path)
-
-                # Create a path to re-utilize the same COCO annotations and Image we uploaded for cropping
-                #with open(coco_json_path, "r") as f:
-                #    coco_json_str = f.read()
-
                 #st.success("COCO annotation created!")
 
                 # Downloadable COCO annotations (use for debugging)
@@ -145,9 +204,7 @@ if insert_file is not None:
                 #st.session_state["last_annotations"] = json.loads(coco_json_str)
                 st.session_state["last_detections"] = session_detections
 
-                # Show the dataframe that has the displayable detections
-                st.subheader("Detected Objects")
-                st.dataframe(df, use_container_width=True)
+
             else:
                 st.subheader("Detected Objects")
                 st.write("🔍 None found.")
