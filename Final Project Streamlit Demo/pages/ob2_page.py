@@ -196,7 +196,7 @@ if insert_file is not None:
                 st.download_button(
                     label="Download COCO JSON",
                     data=coco_json_str,
-                    file_name=coco_json_path,
+                    file_name=f"{image_name}_annotations.json",
                     mime="application/json"
                 )
 
