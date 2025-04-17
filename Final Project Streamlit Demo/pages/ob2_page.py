@@ -41,6 +41,10 @@ def get_date_captured(pil_image):
         pass
     return datetime.now().isoformat()
 
+# when making an annotation, clean it of the filetype (e.g. not img1.jpg_annotations but img1_annotations)
+def clean_annotation(filename):
+    return os.path.splitext(filename)[0]
+
 # helper function to build the COCO that we obtain. it's barebones, focused on 1 image at a time
 def build_coco_json(image_name, width, height, detections):
     """
@@ -91,8 +95,9 @@ def build_coco_json(image_name, width, height, detections):
     return coco
 
 
-    
-    
+# ----------------------------------------------------------------------------    
+
+# Page Actions
 
 # User interface - the title and the guiding text.
 st.title("YOLOv11 Object Detection (Sample)")
@@ -101,13 +106,20 @@ st.write("Upload an image and detect disaster damage using a trained YOLOv11 mod
 # Upload image
 insert_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
+# Blanks for when we return to this page
+saved_upload = None
+saved_session_detections = []
+saved_coco = None
+saved_result = None
+
 # Map category ids to the type of building damage
 CATEGORY_MAP = {
     "Affected_Building": 1,
     "Major_Damage": 2
 }
 
-if insert_file is not None:
+if insert_file is not None: 
+    
     pic = Image.open(insert_file).convert("RGB")
     st.image(pic, caption="Uploaded Image", use_container_width=True)
 
@@ -187,16 +199,15 @@ if insert_file is not None:
                 st.subheader("Detected Objects")
                 st.dataframe(df, use_container_width=True)
 
-                #st.subheader("COCO JSON Preview (Annotations Only)")
-                #st.dataframe(pd.DataFrame(ann_det), use_container_width=True)
                 
                 st.success("COCO annotation created!")
+                clean_name=clean_annotation(pic_name)
 
                 # Downloadable COCO annotations (use for debugging)
                 st.download_button(
                     label="Download COCO JSON",
                     data=coco_json_str,
-                    file_name=f"{pic_name}_annotations.json",
+                    file_name=f"{clean_name}_annotations.json",
                     mime="application/json"
                 )
 
@@ -204,8 +215,49 @@ if insert_file is not None:
                 st.session_state["last_uploaded_image"] = pic
                 st.session_state["last_detections"] = session_detections
                 st.session_state["last_annotations"] = coco_json
+                st.session_state["last_result"] = result_image
+
+                # Extra for the return case
+                st.session_state["last_filename"] = pic_name
+                st.session_state["last_table"] = detections
 
 
             else:
                 st.subheader("Detected Objects")
                 st.write("🔍 None found.")
+
+# If we return to this page, we can reuse the previously stored results
+elif all(k in st.session_state for k in ["last_uploaded_image", "last_detections", "last_annotations"]):
+    # Previous image setup
+    saved_upload = st.session_state["last_uploaded_image"]
+    saved_session_detections = st.session_state["last_detections"]
+    saved_coco = st.session_state.get("last_annotations", None)
+    
+    saved_result = st.session_state.get("last_result", None)
+    saved_imgname = st.session_state["last_filename"]
+    saved_table = st.session_state.get("last_table", [])
+
+    # Start the display
+    st.image(saved_upload, caption="Previously Uploaded image", use_container_width=True)
+
+if saved_coco is not None:
+    st.subheader("Inference results")
+    if saved_result is not None:
+        st.image(saved_result, use_container_width=True)
+
+        st.dataframe(pd.DataFrame(saved_table, use_container_width=True))
+
+        saved_coco_str = json.dumps(saved_coco, indent=2)
+        clean_imgname = clean_filename(saved_imgname)
+        st.download_button(
+            label="Download COCO JSON",
+            data=saved_coco_str,
+            file_name=f"{clean_imgname}_annotations.json",
+            mime="application/json"
+        )
+else:
+    st.subheader("Detected Objects")
+    st.write("🔍 None found.")
+
+            
+            
