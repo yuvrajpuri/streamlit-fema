@@ -38,7 +38,7 @@ def ds_bbox_image(image, annotations):
     for ann in annotations:
         x, y, w, h = ann["bbox"]
         color = "purple" if ann["category_id"] == 1 else "yellow"
-        draw.rectangle([x, y, x + w, y + h], outline = color, width=3)
+        art.rectangle([x, y, x + w, y + h], outline = color, width=3)
     buffer = BytesIO()
     copy.save(buffer, format="JPEG")
     buffer.seek(0)
