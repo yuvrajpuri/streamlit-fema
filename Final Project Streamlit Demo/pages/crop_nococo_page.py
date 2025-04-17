@@ -119,7 +119,7 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
                 for i in chosen_crop_ids:
                     crop = crop_bbox(image, detections[i]["bbox"])
                     cropimg_bytes = BytesIO()
-                    crop.save(crop_bytes, format="JPEG")
+                    crop.save(cropimg_bytes, format="JPEG")
                     cropimg_bytes.seek(0)
 
                     zip_file.writestr(f"{clean_filename}_crop_{i}.jpg", cropimg_bytes.read())
