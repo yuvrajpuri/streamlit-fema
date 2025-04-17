@@ -248,7 +248,7 @@ elif all(k in st.session_state for k in ["last_uploaded_image", "last_detections
             st.dataframe(pd.DataFrame(saved_table), use_container_width=True)
 
             saved_coco_str = json.dumps(saved_coco, indent=2)
-            clean_imgname = clean_filename(saved_imgname)
+            clean_imgname = clean_annotation(saved_imgname)
             st.download_button(
                 label="Download COCO JSON",
                 data=saved_coco_str,
