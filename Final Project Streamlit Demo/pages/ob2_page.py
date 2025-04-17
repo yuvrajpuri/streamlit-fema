@@ -245,7 +245,7 @@ elif all(k in st.session_state for k in ["last_uploaded_image", "last_detections
         if saved_result is not None:
             st.image(saved_result, use_container_width=True)
 
-            st.dataframe(pd.DataFrame(saved_table, use_container_width=True))
+            st.dataframe(pd.DataFrame(saved_table), use_container_width=True)
 
             saved_coco_str = json.dumps(saved_coco, indent=2)
             clean_imgname = clean_filename(saved_imgname)
