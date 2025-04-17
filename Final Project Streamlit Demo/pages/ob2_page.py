@@ -240,24 +240,25 @@ elif all(k in st.session_state for k in ["last_uploaded_image", "last_detections
     # Start the display
     st.image(saved_upload, caption="Previously Uploaded image", use_container_width=True)
 
-if saved_coco is not None:
-    st.subheader("Inference results")
-    if saved_result is not None:
-        st.image(saved_result, use_container_width=True)
+    if saved_coco is not None:
+        st.subheader("Inference results")
+        if saved_result is not None:
+            st.image(saved_result, use_container_width=True)
 
-        st.dataframe(pd.DataFrame(saved_table, use_container_width=True))
+            st.dataframe(pd.DataFrame(saved_table, use_container_width=True))
 
-        saved_coco_str = json.dumps(saved_coco, indent=2)
-        clean_imgname = clean_filename(saved_imgname)
-        st.download_button(
-            label="Download COCO JSON",
-            data=saved_coco_str,
-            file_name=f"{clean_imgname}_annotations.json",
-            mime="application/json"
-        )
-else:
-    st.subheader("Detected Objects")
-    st.write("🔍 None found.")
+            saved_coco_str = json.dumps(saved_coco, indent=2)
+            clean_imgname = clean_filename(saved_imgname)
+            st.download_button(
+                label="Download COCO JSON",
+                data=saved_coco_str,
+                file_name=f"{clean_imgname}_annotations.json",
+                mime="application/json"
+            )
+
+    else:
+        st.subheader("Detected Objects")
+        st.write("🔍 None found.")
 
             
             
