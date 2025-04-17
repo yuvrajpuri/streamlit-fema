@@ -127,7 +127,7 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
             st.download_button(
                 label="Download ZIP",
                 data=zip_buffer.getvalue(),
-                file_name="selected_annotations_bundle.zip",
+                file_name=f"{clean_filename}_bbox_bundle.zip",
                 mime="application/zip"
             )
     else:
