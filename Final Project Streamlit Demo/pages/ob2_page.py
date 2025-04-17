@@ -114,8 +114,8 @@ saved_result = None
 
 # Map category ids to the type of building damage
 CATEGORY_MAP = {
-    "Affected_Building": 1,
-    "Major_Damage": 2
+    "Affected building": 1,
+    "Major damage": 2
 }
 
 if insert_file is not None: 
