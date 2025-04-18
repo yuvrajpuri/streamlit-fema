@@ -88,7 +88,7 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
             st.image(cropped, caption=f"Crop {i+1}: {label}", width=200)
 
     if chosen_crop_ids:
-        if st.button("Download Cropped Pictures"):
+        if st.button("Download Cropped Pictures?"):
             zip_buffer = BytesIO()
 
             # To the annotations, add whether or not they were chosen to be downloaded
