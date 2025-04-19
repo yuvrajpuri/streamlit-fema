@@ -186,49 +186,55 @@ if batch_files:
                 )
 
             # Second Part: ZIP of crops and images
-                if st.button("Make ZIP of Cropped Damage?"):
-                    zip_buffer = BytesIO()
-                    with zipfile.ZipFile(zip_buffer, "w") as zipf:
-                        img_id_map = {img["id"]: img["file_name"] for img in big_coco_json["images"]}
-                        image_lookup = {f.name: Image.open(f).convert("RGB") for f in batch_files}
+                zip_buffer = BytesIO()
+                with zipfile.ZipFile(zip_buffer, "w") as zipf:
+                    img_id_map = {img["id"]: img["file_name"] for img in big_coco_json["images"]}
+                    image_lookup = {f.name: Image.open(f).convert("RGB") for f in batch_files}
 
-                        # Annotations grouped by image_id
-                        group_annotations = {}
-                        for ann in big_coco_json["annotations"]:
-                            group_annotations.setdefault(ann["image_id"], []).append(ann)
+                    # Annotations grouped by image_id
+                    group_annotations = {}
+                    for ann in big_coco_json["annotations"]:
+                        group_annotations.setdefault(ann["image_id"], []).append(ann)
 
-                        for image_info in big_coco_json["images"]:
-                            image_id = image_info["id"]
-                            image_name = image_info["file_name"]
+                    for image_info in big_coco_json["images"]:
+                        image_id = image_info["id"]
+                        image_name = image_info["file_name"]
 
-                            if image_name not in image_lookup:
-                                continue
+                        if image_name not in image_lookup:
+                            continue
 
-                            picture = image_lookup[image_name]
+                        picture = image_lookup[image_name]
 
-                            # Save a picture with bounding boxes
-                            pic_boxes = draw_bounding_boxes(picture.copy(), group_annotations.get(image_id, []))
-                            pic_bytes = BytesIO()
-                            pic_boxes.save(pic_bytes, format="JPEG")
+                        # Save a picture with bounding boxes
+                        pic_boxes = draw_bounding_boxes(picture.copy(), group_annotations.get(image_id, []))
+                        pic_bytes = BytesIO()
+                        pic_boxes.save(pic_bytes, format="JPEG")
 
-                            clean = clean_annotation(image_name)
-                            zipf.writestr(f"{clean}_bboxes.jpg", pic_bytes.getvalue())
+                        clean = clean_annotation(image_name)
+                        zipf.writestr(f"{clean}_bboxes.jpg", pic_bytes.getvalue())
 
-                            # Save the crops
-                            for i, anno in enumerate(group_annotations.get(image_id, [])):
-                                crop = crop_bbox(picture, anno["bbox"])
-                                crop_buffer = BytesIO()
-                                crop.save(crop_buffer, format="JPEG")
-                                crop_buffer.seek(0)
-                                zipf.writestr(f"{clean}_crop_{i}.jpg", crop_buffer.read())
+                        # Save the crops
+                        for i, anno in enumerate(group_annotations.get(image_id, [])):
+                            crop = crop_bbox(picture, anno["bbox"])
+                            crop_buffer = BytesIO()
+                            crop.save(crop_buffer, format="JPEG")
+                            crop_buffer.seek(0)
+                            zipf.writestr(f"{clean}_crop_{i}.jpg", crop_buffer.read())
 
                         # Make the COCO JSON in the batch folder
-                        zipf.writestr("batch_annotations.json", json.dumps(big_coco_json, indent=2))
+                    zipf.writestr("batch_annotations.json", json.dumps(big_coco_json, indent=2))
 
                     # Save the zip file to the session_state since we are effectively rerunning the script
                     st.session_state["batch_zip"] = zip_buffer.getvalue()
                     st.session_state["batch_zip_ready"] = True
-
+                    
+                    if st.session_state.get("batch_zip_ready", False):
+                        st.download_button(
+                        label="Download Crops & Annotations (ZIP)",
+                        data=st.session_state["batch_zip"],
+                        file_name="batch_crops_bundle.zip",
+                        mime="application/zip"
+                    )
                 
         
             else:
@@ -243,10 +249,4 @@ if batch_files:
             else:
                 st.success("All images processed successfully!")
                 
-            if st.session_state.get("batch_zip_ready", False):
-                st.download_button(
-                    label="Download Crops & Annotations (ZIP)",
-                    data=st.session_state["batch_zip"],
-                    file_name="batch_crops_bundle.zip",
-                    mime="application/zip"
-                )
+            
