@@ -31,6 +31,17 @@ def load_model():
 
 model, DEVICE = load_model()
 
+CATEGORY_MAP = {
+    "Affected_Building": 1,
+    "Major_Damage": 2
+}
+
+CATEGORY_LABELS = {
+    1: "Affected building",
+    2: "Major damage"
+}
+
+
 # helper function to observe EXIF metadata for the date the image was captured. defaults to today if none
 def get_date_captured(pil_image):
     try:
