@@ -150,7 +150,7 @@ if batch_files:
                             "id": anno_id_counter,
                             "image_id": img_id_counter,
                             "category_id": category_id,
-                            "bbox": [int(x1), int(y1), int(w), int(h)],
+                            "bbox": [int(x1), int(y1), int(width), int(height)],
                             "area": int(width * height),
                             "iscrowd": 0
                         }
