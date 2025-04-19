@@ -1,6 +1,6 @@
 # Same original start
 import streamlit as st
-from PIL import Image
+from PIL import Image, ImageDraw
 from ultralytics import YOLO
 import pandas as pd
 import torch
@@ -8,6 +8,7 @@ import numpy as np
 import os
 import json
 from io import BytesIO
+import zipfile
 
 # Needed for COCO annotation generation
 import uuid
@@ -57,6 +58,18 @@ def get_date_captured(pil_image):
 # when making an annotation, clean it of the filetype (e.g. not img1.jpg_annotations but img1_annotations)
 def clean_annotation(filename):
     return os.path.splitext(filename)[0]
+
+def crop_bbox(image, bbox):
+    x, y, w, h = bbox
+    return image.crop((x, y, x + w, y + h))
+
+def draw_bounding_boxes(image, annotations):
+    draw = ImageDraw.Draw(image)
+    for ann in annotations:
+        x, y, w, h = ann["bbox"]
+        color = "purple" if ann["category_id"] == 1 else "yellow"
+        draw.rectangle([x, y, x + w, y + h], outline=color, width=3)
+    return image
 
 # ----------------------------
 
@@ -160,6 +173,55 @@ if batch_files:
                 data = json_str,
                 file_name="batch_annotations.json"
             )
+
+        # Second Part: ZIP of crops and images
+            if st.button("Make ZIP of Cropped Damage?"):
+                zip_buffer = BytesIO()
+                with zipfile.ZipFile(zip_buffer, "w") as zipf:
+                    img_id_map = {img["id"]: img["file_name"] for img in big_coco_json["images"]}
+                    image_lookup = {f.name: Image.open(f).convert("RGB") for f in batch_files}
+
+                    # Annotations grouped by image_id
+                    group_annotations: {}
+                    for ann in big_coco_json["annotations"]:
+                        group_annotations.setdefault(ann["image_id"], []).append(ann)
+
+                    for image_info in big_coco_json["images"]:
+                        image_id = image_info["id"]
+                        image_name = image_info["filename"]
+
+                        if image_name not in image_lookup:
+                            continue
+
+                        picture = image_lookup[image_name]
+
+                        # Save a picture with bounding boxes
+                        pic_boxes = draw_bounding_boxes(picture.copy(), group_annotations.get(image_id, []))
+                        pic_bytes = BytesIO()
+                        pic_boxes.save(pic_bytes, format="JPEG")
+
+                        clean = clean_annotation(image_name)
+                        zipf.writestr(f"{clean}_bboxes.jpg", pic_bytes.getvalue())
+
+                        # Save the crops
+                        for i, anno in enumerate(group_annotations.get(image_id, [])):
+                            crop = crop_bbox(picture, anno["bbox"])
+                            crop_buffer = BytesIO()
+                            crop.save(crop_buffer, format="JPEG")
+                            crop_buffer.seek(0)
+                            zipf.writestr(f"{clean}_crop_{i}.jpg", crop_buffer.read())
+
+                    # Make the COCO JSON in the batch folder
+                    zipf.writestr("batch_annotations.json", json.dumps(big_coco_json, indent=2))
+
+            # Make the big zipfile downloadable
+            st.download_button(
+                label="Download Crops & Annotations (ZIP)",
+                data=zip_buffer.getvalue(),
+                file_name="batch_crops_bundle.zip",
+                mime="application/zip"
+            )
+        
         else:
             st.info("No objects were detected. No annotations were generated - nothing to download. Submit different images.")
 
