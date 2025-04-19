@@ -221,7 +221,7 @@ if batch_files:
                             crop_buffer = BytesIO()
                             crop.save(crop_buffer, format="JPEG")
                             crop_buffer.seek(0)
-                            zipf.writestr(f"{clean}/{clean}_crop_{i}.jpg", crop_buffer.read())
+                            zipf.writestr(f"{clean}/{clean}_crop_{i+1}.jpg", crop_buffer.read())
 
                         # Make the COCO JSON in the batch folder
                     zipf.writestr("batch_annotations.json", json.dumps(big_coco_json, indent=2))
