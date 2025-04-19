@@ -87,7 +87,7 @@ if batch_files:
             boxes = result.boxes
 
             if boxes and boxes.xyxy is not None and len(boxes) > 0:
-                xyxy = boxes.xyxy.cpu.numpy()
+                xyxy = boxes.xyxy.cpu().numpy()
                 cls = boxes.cls.cpu().numpy()
                 names = result.names
 
