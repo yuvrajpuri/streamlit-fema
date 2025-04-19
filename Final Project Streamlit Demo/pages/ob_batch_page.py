@@ -150,7 +150,7 @@ if batch_files:
 
         if skipped:
             st.subheader("Images Skipped (no detections)")
-            st.write(skipped_images)
+            st.write(skipped)
         else:
             st.success("All images processed successfully!")
         
