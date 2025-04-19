@@ -229,13 +229,7 @@ if batch_files:
                     st.session_state["batch_zip"] = zip_buffer.getvalue()
                     st.session_state["batch_zip_ready"] = True
 
-                if st.session_state.get("batch_zip_ready", False):
-                    st.download_button(
-                        label="Download Crops & Annotations (ZIP)",
-                        data=st.session_state["batch_zip"],
-                        file_name="batch_crops_bundle.zip",
-                        mime="application/zip"
-                    )
+                
         
             else:
                 st.info("No objects were detected. No annotations were generated - nothing to download. Submit different images.")
@@ -248,4 +242,11 @@ if batch_files:
                     st.markdown(f"- ❌ **{name}**")
             else:
                 st.success("All images processed successfully!")
-        
+                
+            if st.session_state.get("batch_zip_ready", False):
+                st.download_button(
+                    label="Download Crops & Annotations (ZIP)",
+                    data=st.session_state["batch_zip"],
+                    file_name="batch_crops_bundle.zip",
+                    mime="application/zip"
+                )
