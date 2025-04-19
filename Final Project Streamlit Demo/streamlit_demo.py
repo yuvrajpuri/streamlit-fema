@@ -24,7 +24,9 @@ ob2_page = st.Page("pages/ob2_page.py", title = "Object Detection (example)")
 
 # cap2_page = st.Page("pages/cap2_page.py", title = "Captioning in Streamlit (PaliGemma)")
 
-pg = st.navigation([main_page, ob_page, cap_page, crop_page, geo_page, fin_page, ob2_page, crop_nococo_page])
+ob_batch = st.Page("pages/ob_batch_page.py", title= "Batch Object Detection")
+
+pg = st.navigation([main_page, ob_page, cap_page, crop_page, geo_page, fin_page, ob2_page, crop_nococo_page, ob_batch])
 
 # Run the selected page
 pg.run()
