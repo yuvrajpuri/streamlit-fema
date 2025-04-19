@@ -211,7 +211,9 @@ if batch_files:
                         pic_boxes.save(pic_bytes, format="JPEG")
 
                         clean = clean_annotation(image_name)
-                        zipf.writestr(f"{clean}_bboxes.jpg", pic_bytes.getvalue())
+                        
+                        # Make the folder via prefix and put bounding box image + crops in it
+                        zipf.writestr(f"{clean}/{clean}_bboxes.jpg", pic_bytes.getvalue())
 
                         # Save the crops
                         for i, anno in enumerate(group_annotations.get(image_id, [])):
@@ -219,7 +221,7 @@ if batch_files:
                             crop_buffer = BytesIO()
                             crop.save(crop_buffer, format="JPEG")
                             crop_buffer.seek(0)
-                            zipf.writestr(f"{clean}_crop_{i}.jpg", crop_buffer.read())
+                            zipf.writestr(f"{clean}/{clean}_crop_{i}.jpg", crop_buffer.read())
 
                         # Make the COCO JSON in the batch folder
                     zipf.writestr("batch_annotations.json", json.dumps(big_coco_json, indent=2))
