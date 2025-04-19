@@ -84,7 +84,7 @@ if batch_files:
 
             results = model(image, device=DEVICE)
             result = results[0]
-            boxes = results.boxes
+            boxes = result.boxes
 
             if boxes and boxes.xyxy is not None and len(boxes) > 0:
                 xyxy = boxes.xyxy.cpu.numpy()
