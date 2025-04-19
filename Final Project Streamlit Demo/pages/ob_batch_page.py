@@ -214,10 +214,13 @@ if batch_files:
                     # Make the COCO JSON in the batch folder
                     zipf.writestr("batch_annotations.json", json.dumps(big_coco_json, indent=2))
 
-                # Make the big zipfile downloadable
+                # Save the zip file to the session_state since we are effectively rerunning the script
+                st.session_state["batch_zip"] = zip_buffer.getvalue()
+
+            if "batch_zip" in st.session_state:
                 st.download_button(
                     label="Download Crops & Annotations (ZIP)",
-                    data=zip_buffer.getvalue(),
+                    data=st.session_state["batch_zip"],
                     file_name="batch_crops_bundle.zip",
                     mime="application/zip"
                 )
