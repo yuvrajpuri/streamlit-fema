@@ -182,13 +182,13 @@ if batch_files:
                     image_lookup = {f.name: Image.open(f).convert("RGB") for f in batch_files}
 
                     # Annotations grouped by image_id
-                    group_annotations: {}
+                    group_annotations = {}
                     for ann in big_coco_json["annotations"]:
                         group_annotations.setdefault(ann["image_id"], []).append(ann)
 
                     for image_info in big_coco_json["images"]:
                         image_id = image_info["id"]
-                        image_name = image_info["filename"]
+                        image_name = image_info["file_name"]
 
                         if image_name not in image_lookup:
                             continue
