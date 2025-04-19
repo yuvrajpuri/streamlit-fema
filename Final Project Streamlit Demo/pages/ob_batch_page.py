@@ -185,7 +185,7 @@ if batch_files:
                     file_name="batch_annotations.json"
                 )
 
-            # Second Part: ZIP of crops and images
+                # Second Part: ZIP of crops and images
                 zip_buffer = BytesIO()
                 with zipfile.ZipFile(zip_buffer, "w") as zipf:
                     img_id_map = {img["id"]: img["file_name"] for img in big_coco_json["images"]}
@@ -224,17 +224,18 @@ if batch_files:
                         # Make the COCO JSON in the batch folder
                     zipf.writestr("batch_annotations.json", json.dumps(big_coco_json, indent=2))
 
-                    # Save the zip file to the session_state since we are effectively rerunning the script
-                    st.session_state["batch_zip"] = zip_buffer.getvalue()
-                    st.session_state["batch_zip_ready"] = True
+                # Save the zip file to the session_state since we are effectively rerunning the script
+                zip_buffer.seek(0)
+                st.session_state["batch_zip"] = zip_buffer.getvalue()
+                st.session_state["batch_zip_ready"] = True
                     
-                    if st.session_state.get("batch_zip_ready", False):
-                        st.download_button(
-                        label="Download Crops & Annotations (ZIP)",
-                        data=st.session_state["batch_zip"],
-                        file_name="batch_crops_bundle.zip",
-                        mime="application/zip"
-                    )
+                if st.session_state.get("batch_zip_ready", False):
+                    st.download_button(
+                    label="Download Crops & Annotations (ZIP)",
+                    data=st.session_state["batch_zip"],
+                    file_name="batch_crops_bundle.zip",
+                    mime="application/zip"
+                )
                 
         
             else:
