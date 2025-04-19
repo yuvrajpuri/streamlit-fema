@@ -68,8 +68,15 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
 
     # List containing the cropped images that we selectively include
     chosen_crop_ids = []
+
+    # Saving the cropped images to the session state
+    if "cropped_images" not in st.session_state:
+        st.session_state["cropped_images"] = [
+            crop_bbox(image, det["bbox"]) for det in detections
+        ]
+        
     
-    for i, det in enumerate(detections):
+    for i, (det, cropped) in enumerate(zip(detections, st.session_state["cropped_images"])):
         
         col1, col2 = st.columns([1,3])
         
@@ -85,53 +92,52 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
 
         # Cropped images themselves
         with col2:
-            cropped = crop_bbox(image, det["bbox"])
+            #cropped = crop_bbox(image, det["bbox"])
             label = CATEGORY_LABELS.get(det["category_id"], "Unknown")
             st.image(cropped, caption=f"Crop {i+1}: {label}", width=200)
 
     if chosen_crop_ids:
-        if st.button("Download Cropped Pictures?"):
-            zip_buffer = BytesIO()
+        zip_buffer = BytesIO()
 
             # To the annotations, add whether or not they were chosen to be downloaded
-            copied_annotations = []
-            for i, anno in enumerate(coco_data["annotations"]):
-                anno2 = anno.copy()
-                anno2["selected"] = i in chosen_crop_ids
-                copied_annotations.append(anno2)
+        copied_annotations = []
+        for i, anno in enumerate(coco_data["annotations"]):
+            anno2 = anno.copy()
+            anno2["selected"] = i in chosen_crop_ids
+            copied_annotations.append(anno2)
 
-            new_coco_export = {
-                "images": coco_data["images"],
-                "annotations": copied_annotations,
-                "categories": coco_data["categories"]
-            }
+        new_coco_export = {
+            "images": coco_data["images"],
+            "annotations": copied_annotations,
+            "categories": coco_data["categories"]
+        }
 
             # The zipfile
-            clean_filename = clean_annotation(imgname)
-            with zipfile.ZipFile(zip_buffer, "w") as zip_file:
+        clean_filename = clean_annotation(imgname)
+        with zipfile.ZipFile(zip_buffer, "w") as zip_file:
                 # Save the new COCO JSON
-                coco_json_str = json.dumps(new_coco_export, indent=2)
-                zip_file.writestr(f"{clean_filename}_annotations.json", coco_json_str)
+            coco_json_str = json.dumps(new_coco_export, indent=2)
+            zip_file.writestr(f"{clean_filename}_annotations.json", coco_json_str)
 
                 # Save the picture of the image with the bounding boxes
-                saved_bbox_image = ds_bbox_image(image, detections)
-                zip_file.writestr(f"{clean_filename}_bboxes.jpg", saved_bbox_image.read())
+            saved_bbox_image = ds_bbox_image(image, detections)
+            zip_file.writestr(f"{clean_filename}_bboxes.jpg", saved_bbox_image.read())
 
                 # Save the crops that we chose
-                for i in chosen_crop_ids:
-                    crop = crop_bbox(image, detections[i]["bbox"])
-                    cropimg_bytes = BytesIO()
-                    crop.save(cropimg_bytes, format="JPEG")
-                    cropimg_bytes.seek(0)
+            for i in chosen_crop_ids:
+                crop = st.session_state["cropped_images"][i]
+                cropimg_bytes = BytesIO()
+                crop.save(cropimg_bytes, format="JPEG")
+                cropimg_bytes.seek(0)
 
-                    zip_file.writestr(f"{clean_filename}_crop_{i}.jpg", cropimg_bytes.read())
+                zip_file.writestr(f"{clean_filename}_crop_{i}.jpg", cropimg_bytes.read())
 
-            st.download_button(
-                label="Download ZIP",
-                data=zip_buffer.getvalue(),
-                file_name=f"{clean_filename}_bbox_bundle.zip",
-                mime="application/zip"
-            )
+        st.download_button(
+            label="Download ZIP",
+            data=zip_buffer.getvalue(),
+            file_name=f"{clean_filename}_bbox_bundle.zip",
+            mime="application/zip"
+        )
     else:
         st.info("Choose at least one image to download.")
 
