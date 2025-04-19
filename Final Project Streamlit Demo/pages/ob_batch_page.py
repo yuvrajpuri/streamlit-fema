@@ -62,4 +62,95 @@ batch_files = st.file_uploader(
 if batch_files:
   process = st.button("Run Batch Inference")
   if process:
-    st.write("Joke")
+    with st.spinner("Running batch object detection..."):
+
+        # Lists and counters to keep track of where we're at
+        all_annotations = []
+        all_images = []
+        skipped = []
+        img_id_counter = 1
+        anno_id_counter = 1
+
+        for uploaded in batch_files:
+            try:
+                image = Image.open(uploaded).convert("RGB")
+            except Exception:
+                skipped.append(uploaded.name + " (invalid image)")
+                continue
+
+            w, h = image.size
+            img_name = uploaded.name
+            conception = get_date_captured(image)
+
+            results = model(image, device=DEVICE)
+            result = results[0]
+            boxes = results.boxes
+
+            if boxes and boxes.xyxy is not None and len(boxes) > 0:
+                xyxy = boxes.xyxy.cpu.numpy()
+                cls = boxes.cls.cpu().numpy()
+                names = result.names
+
+                # Image section of the JSON (Image, Annotations, Categories)
+                img_dict = {
+                    "id": img_id_counter,
+                    "file_name": img_name,
+                    "width": w,
+                    "height": h,
+                    "date_captured": conception
+                }
+                all_images.append(img_dict)
+
+                for i in range(len(xyxy)):
+                    x1, y1, x2, y2 = xyxy[i]
+                    category_name = names[int(cls[i])]
+
+                    category_id = CATEGORY_MAP.get(category_name)
+                    if not category_id:
+                        continue
+
+                    width = x2-x1
+                    height = y2-y1
+
+                    # Annotations for the given image
+                    annotations = {
+                        "id": anno_id_counter,
+                        "image_id": img_id_counter,
+                        "category_id": category_id,
+                        "bbox": [int(x1), int(y1), int(w), int(h)],
+                        "area": int(width * height),
+                        "iscrowd": 0
+                    }
+                    all_annotations.append(annotations)
+                    anno_id_counter +=1
+
+                img_id_counter +=1
+
+            # No bounding boxes then skip it
+            else:  
+                skipped.append(img_name)
+
+        # Make the JSON with all the images and annotations
+        big_coco_json = {
+            "images": all_images,
+            "annotations": all_annotations,
+            "categories": [
+                {"id": 1, "name": "Affected building"},
+                {"id": 2, "name": "Major damage"}
+            ]
+        }
+
+        # Big JSON , made downloadable
+        json_str = json.dumps(big_coco_json, indent=2)
+        st.download_button(
+            label="Download COCO Annotations",
+            data = json_str,
+            file_name="batch_annotations.json"
+        )
+
+        if skipped:
+            st.subheader("Images Skipped (no detections)")
+            st.write(skipped_images)
+        else:
+            st.success("All images processed successfully!")
+        
