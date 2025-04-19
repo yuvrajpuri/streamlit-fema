@@ -214,13 +214,13 @@ if batch_files:
                     # Make the COCO JSON in the batch folder
                     zipf.writestr("batch_annotations.json", json.dumps(big_coco_json, indent=2))
 
-            # Make the big zipfile downloadable
-            st.download_button(
-                label="Download Crops & Annotations (ZIP)",
-                data=zip_buffer.getvalue(),
-                file_name="batch_crops_bundle.zip",
-                mime="application/zip"
-            )
+                # Make the big zipfile downloadable
+                st.download_button(
+                    label="Download Crops & Annotations (ZIP)",
+                    data=zip_buffer.getvalue(),
+                    file_name="batch_crops_bundle.zip",
+                    mime="application/zip"
+                )
         
         else:
             st.info("No objects were detected. No annotations were generated - nothing to download. Submit different images.")
