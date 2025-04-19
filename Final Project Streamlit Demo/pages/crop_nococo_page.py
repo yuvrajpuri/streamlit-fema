@@ -22,7 +22,6 @@ def crop_bbox(image, bbox):
     return image.crop((x, y, x + w, y + h))
 
 # Put the bounding boxes on the image
-# @st.cache_resource ? 
 def draw_bounding_boxes(image, detections):
     draw = ImageDraw.Draw(image)
     for det in detections:
@@ -33,7 +32,6 @@ def draw_bounding_boxes(image, detections):
     return image
 
 # Save the image that has the bounding boxes
-# @st.cache_resource ?
 def ds_bbox_image(image, annotations):
     copy = image.copy()
     art = ImageDraw.Draw(copy)
