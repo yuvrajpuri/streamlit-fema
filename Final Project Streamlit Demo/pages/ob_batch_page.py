@@ -141,16 +141,23 @@ if batch_files:
         }
 
         # Big JSON , made downloadable
-        json_str = json.dumps(big_coco_json, indent=2)
-        st.download_button(
-            label="Download COCO Annotations",
-            data = json_str,
-            file_name="batch_annotations.json"
-        )
+        if all_annotations:
+            
+            json_str = json.dumps(big_coco_json, indent=2)
+            st.download_button(
+                label="Download COCO Annotations",
+                data = json_str,
+                file_name="batch_annotations.json"
+            )
+        else:
+            st.info("No objects were detected. No annotations were generated - nothing to download. Submit different images.")
 
-        if skipped:
-            st.subheader("Images Skipped (no detections)")
-            st.write(skipped)
+        if len(skipped) == len(batch_files):
+            st.warning("All uploaded images had no detectable objects.")
+        elif skipped:
+            st.subheader("Images Skipped (no detections present)")
+            for name in skipped:
+                st.markdown(f"- ❌ **{name}**")
         else:
             st.success("All images processed successfully!")
         
