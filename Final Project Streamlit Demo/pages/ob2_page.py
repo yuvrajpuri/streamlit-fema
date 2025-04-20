@@ -16,23 +16,19 @@ from datetime import datetime
 from PIL.ExifTags import TAGS
 
 # Utils imports
-# from utils.model_utils import load_model
+from utils.model_utils import load_model
 # from utils.annotation_utils import get_date_captured
-# from utils.zip_utils import clean_annotation
+from utils.zip_utils import clean_annotation
 
 # try replacing the current code with these utils imports
 
 # Absolute path to the model in Colab - assuming its been pre-uploaded. Need to adjust for a better solution.
-MODEL_PATH = "/content/best.pt"
+# If we need to change the model as opposed to hardcoding it in the repository (but it's on colab)
+# We need to adjust the method in the model_utils file
+# MODEL_PATH = "/content/best.pt"
 
 
 # Load model once
-@st.cache_resource
-def load_model():
-    model = YOLO(MODEL_PATH)
-    device = "mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu"
-    model.to(device)
-    return model, device
 
 model, DEVICE = load_model()
 
@@ -48,9 +44,6 @@ def get_date_captured(pil_image):
         pass
     return datetime.now().isoformat()
 
-# when making an annotation, clean it of the filetype (e.g. not img1.jpg_annotations but img1_annotations)
-def clean_annotation(filename):
-    return os.path.splitext(filename)[0]
 
 # helper function to build the COCO that we obtain. it's barebones, focused on 1 image at a time
 def build_coco_json(image_name, width, height, detections):
