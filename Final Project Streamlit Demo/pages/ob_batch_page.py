@@ -18,23 +18,11 @@ from datetime import datetime
 from PIL.ExifTags import TAGS
 
 # utils files imports
-# from utils.model_utils import load_model
-# from utils.annotation_utils import get_date_captured
-# from utils.zip_utils import clean_annotation
-# from utils.image_utils import crop_bbox, draw_bounding_boxes
-
-# Absolute path to the model in Colab - assuming its been pre-uploaded. Need to adjust for a better solution.
-MODEL_PATH = "/content/best.pt"
-
-
-
-# Load model once
-@st.cache_resource
-def load_model():
-    model = YOLO(MODEL_PATH)
-    device = "mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu"
-    model.to(device)
-    return model, device
+from utils.model_utils import load_model
+from utils.annotation_utils import get_date_captured
+from utils.zip_utils import clean_annotation
+from utils.image_utils import crop_bbox, draw_bounding_boxes
+# for info with regards to the path to the YOLO model, refer to ob2 and model_utils
 
 model, DEVICE = load_model()
 
@@ -43,39 +31,21 @@ CATEGORY_MAP = {
     "Major_Damage": 2
 }
 
-CATEGORY_LABELS = {
-    1: "Affected building",
-    2: "Major damage"
-}
+#CATEGORY_LABELS = {
+#    1: "Affected building",
+#    2: "Major damage"
+#}
 
+# crop_bbox and draw bbox SHOULD be fine as is without adjustment
+# commenting out draw bbox for the reference
 
-# helper function to observe EXIF metadata for the date the image was captured. defaults to today if none
-def get_date_captured(pil_image):
-    try:
-        exif = pil_image._getexif()
-        if exif is not None:
-            for tag, value in exif.items():
-                if TAGS.get(tag) == "DateTimeOriginal":
-                    return datetime.strptime(value, "%Y:%m:%d %H:%M:%S").isoformat()
-    except Exception:
-        pass
-    return datetime.now().isoformat()
-
-# when making an annotation, clean it of the filetype (e.g. not img1.jpg_annotations but img1_annotations)
-def clean_annotation(filename):
-    return os.path.splitext(filename)[0]
-
-def crop_bbox(image, bbox):
-    x, y, w, h = bbox
-    return image.crop((x, y, x + w, y + h))
-
-def draw_bounding_boxes(image, annotations):
-    draw = ImageDraw.Draw(image)
-    for ann in annotations:
-        x, y, w, h = ann["bbox"]
-        color = "purple" if ann["category_id"] == 1 else "yellow"
-        draw.rectangle([x, y, x + w, y + h], outline=color, width=3)
-    return image
+#def draw_bounding_boxes(image, annotations):
+#    draw = ImageDraw.Draw(image)
+#    for ann in annotations:
+#        x, y, w, h = ann["bbox"]
+#        color = "purple" if ann["category_id"] == 1 else "yellow"
+#        draw.rectangle([x, y, x + w, y + h], outline=color, width=3)
+#    return image
 
 # ----------------------------
 
