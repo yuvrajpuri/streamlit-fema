@@ -5,6 +5,9 @@ import json
 import zipfile
 from io import BytesIO
 
+# utils imports
+# from utils.image_utils import crop_bbox, draw_bounding_boxes
+
 # Labels for the damage
 CATEGORY_LABELS = {
     1: "Affected building",
