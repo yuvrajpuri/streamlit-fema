@@ -17,7 +17,7 @@ CATEGORY_MAP = {
 #        pass
 #    return datetime.now().isoformat()
 
-def get_date_captured(image, verbose=False):
+def get_date_captured(image, verbose=True):
     """
     Extracts date from EXIF if available. Tries .getexif() first, then _getexif().
     """
