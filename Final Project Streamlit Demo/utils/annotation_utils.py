@@ -16,3 +16,5 @@ def get_date_captured(image):
     except:
         pass
     return datetime.now().isoformat()
+
+# def build_coco_json?
