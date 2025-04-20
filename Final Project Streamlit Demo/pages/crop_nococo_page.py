@@ -7,6 +7,7 @@ from io import BytesIO
 
 # utils imports
 # from utils.image_utils import crop_bbox, draw_bounding_boxes
+from utils.zip_utils import clean_annotation
 
 # Labels for the damage
 CATEGORY_LABELS = {
@@ -16,8 +17,8 @@ CATEGORY_LABELS = {
 
 # Helper functions
 # Recreated cleaning the filename for the json
-def clean_annotation(filename):
-    return os.path.splitext(filename)[0]
+# def clean_annotation(filename):
+#    return os.path.splitext(filename)[0]
     
 # Crop image
 def crop_bbox(image, bbox):
