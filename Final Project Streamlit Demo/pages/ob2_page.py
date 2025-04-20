@@ -15,6 +15,13 @@ from datetime import datetime
 from datetime import datetime
 from PIL.ExifTags import TAGS
 
+# Utils imports
+# from utils.model_utils import load_model
+# from utils.annotation_utils import get_date_captured
+# from utils.zip_utils import clean_annotation
+
+# try replacing the current code with these utils imports
+
 # Absolute path to the model in Colab - assuming its been pre-uploaded. Need to adjust for a better solution.
 MODEL_PATH = "/content/best.pt"
 
