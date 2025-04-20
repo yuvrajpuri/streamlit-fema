@@ -14,12 +14,3 @@ pg = st.navigation([main_page, ob2_page, crop_nococo_page, ob_batch, cap_page])
 
 # Run the selected page
 pg.run()
-
-
-#ob_page = st.Page("pages/ob_page.py", title="Object Detection")
-#crop_page = st.Page("pages/crop_page.py", title= "Cropping")
-#crop2_page = st.Page("pages/crop2_page.py", title = "Cropping Tool Examples")
-#crop3_page = st.Page("pages/crop3_page.py", title = "Cropping using Uploaded Images")
-
-
-
