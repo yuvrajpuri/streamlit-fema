@@ -19,17 +19,17 @@ from PIL.ExifTags import TAGS
 
 # utils files imports
 from utils.model_utils import load_model
-from utils.annotation_utils import get_date_captured
+from utils.annotation_utils import get_date_captured, CATEGORY_MAP
 from utils.zip_utils import clean_annotation
 from utils.image_utils import crop_bbox, draw_bounding_boxes
 # for info with regards to the path to the YOLO model, refer to ob2 and model_utils
 
 model, DEVICE = load_model()
 
-CATEGORY_MAP = {
-    "Affected_Building": 1,
-    "Major_Damage": 2
-}
+#CATEGORY_MAP = {
+#    "Affected_Building": 1,
+#    "Major_Damage": 2
+#}
 
 #CATEGORY_LABELS = {
 #    1: "Affected building",
