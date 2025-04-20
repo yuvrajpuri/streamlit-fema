@@ -17,7 +17,7 @@ from PIL.ExifTags import TAGS
 
 # Utils imports
 from utils.model_utils import load_model
-# from utils.annotation_utils import get_date_captured
+from utils.annotation_utils import get_date_captured
 from utils.zip_utils import clean_annotation
 
 # try replacing the current code with these utils imports
@@ -33,16 +33,16 @@ from utils.zip_utils import clean_annotation
 model, DEVICE = load_model()
 
 # helper function to observe EXIF metadata for the date the image was captured. defaults to today if none
-def get_date_captured(pil_image):
-    try:
-        exif = pil_image._getexif()
-        if exif is not None:
-            for tag, value in exif.items():
-                if TAGS.get(tag) == "DateTimeOriginal":
-                    return datetime.strptime(value, "%Y:%m:%d %H:%M:%S").isoformat()
-    except Exception:
-        pass
-    return datetime.now().isoformat()
+#def get_date_captured(pil_image):
+#    try:
+#        exif = pil_image._getexif()
+#        if exif is not None:
+#            for tag, value in exif.items():
+#                if TAGS.get(tag) == "DateTimeOriginal":
+#                    return datetime.strptime(value, "%Y:%m:%d %H:%M:%S").isoformat()
+#    except Exception:
+#        pass
+#    return datetime.now().isoformat()
 
 
 # helper function to build the COCO that we obtain. it's barebones, focused on 1 image at a time
