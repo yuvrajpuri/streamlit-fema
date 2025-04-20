@@ -3,7 +3,7 @@ import streamlit as st
 main_page = st.Page("main.py", title="Main Page")
 #ob_page = st.Page("pages/ob_page.py", title="Object Detection")
 cap_page = st.Page("pages/cap_page.py", title = "Captioning (Video Demonstration)")
-crop_page = st.Page("pages/crop_page.py", title= "Cropping")
+#crop_page = st.Page("pages/crop_page.py", title= "Cropping")
 #geo_page = st.Page("geo_page.py", title = "Georeferencing")
 #fin_page = st.Page("pages/fin_page.py", title = "Final Output")
 
@@ -26,7 +26,7 @@ ob2_page = st.Page("pages/ob2_page.py", title = "Object Detection (example)")
 
 ob_batch = st.Page("pages/ob_batch_page.py", title= "Batch Object Detection")
 
-pg = st.navigation([main_page, ob_page, crop_page, ob2_page, crop_nococo_page, ob_batch, cap_page])
+pg = st.navigation([main_page, ob2_page, crop_nococo_page, ob_batch, cap_page])
 
 # Run the selected page
 pg.run()
