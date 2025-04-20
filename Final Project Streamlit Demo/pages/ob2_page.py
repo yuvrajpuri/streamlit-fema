@@ -71,6 +71,7 @@ def build_coco_json(image_name, width, height, detections):
             "category_id": det["category_id"],
             "bbox": [x, y, w, h],
             "area": w * h,
+            "score": det["confidence"],
             "segmentation":[],
             "iscrowd": 0
         })
@@ -180,7 +181,8 @@ if insert_file is not None:
 
                     session_detections.append({
                         "bbox": [int(x1), int(y1), int(width_box), int(height_box)],
-                        "category_id": category_id
+                        "category_id": category_id,
+                        "confidence": float(conf[i])
                     })
 
                     # Annotations information
