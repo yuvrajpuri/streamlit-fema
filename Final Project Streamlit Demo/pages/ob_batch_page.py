@@ -122,6 +122,7 @@ if batch_files:
                 if boxes and boxes.xyxy is not None and len(boxes) > 0:
                     xyxy = boxes.xyxy.cpu().numpy()
                     cls = boxes.cls.cpu().numpy()
+                    conf = boxes.conf.cpu().numpy()
                     names = result.names
 
                     # Image section of the JSON (Image, Annotations, Categories)
@@ -152,6 +153,8 @@ if batch_files:
                             "category_id": category_id,
                             "bbox": [int(x1), int(y1), int(width), int(height)],
                             "area": int(width * height),
+                            "score": float(conf[i]),
+                            "segmentation": [],
                             "iscrowd": 0
                         }
                         all_annotations.append(annotations)
