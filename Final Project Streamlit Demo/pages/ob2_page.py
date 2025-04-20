@@ -8,7 +8,7 @@ import os
 import json
 
 # Needed for COCO annotation generation
-import uuid
+#import uuid
 from datetime import datetime
 
 # After loading image via PIL
@@ -31,19 +31,6 @@ from utils.zip_utils import clean_annotation
 # Load model once
 
 model, DEVICE = load_model()
-
-# helper function to observe EXIF metadata for the date the image was captured. defaults to today if none
-#def get_date_captured(pil_image):
-#    try:
-#        exif = pil_image._getexif()
-#        if exif is not None:
-#            for tag, value in exif.items():
-#                if TAGS.get(tag) == "DateTimeOriginal":
-#                    return datetime.strptime(value, "%Y:%m:%d %H:%M:%S").isoformat()
-#    except Exception:
-#        pass
-#    return datetime.now().isoformat()
-
 
 # helper function to build the COCO that we obtain. it's barebones, focused on 1 image at a time
 def build_coco_json(image_name, width, height, detections):
