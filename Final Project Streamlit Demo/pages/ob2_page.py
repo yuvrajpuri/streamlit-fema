@@ -94,6 +94,32 @@ st.set_page_config(page_title="Object Detection", layout="wide", initial_sidebar
 st.title("YOLOv11 Object Detection (Sample)")
 st.write("Upload an image and detect disaster damage using a trained YOLOv11 model.")
 
+st.sidebar.markdown("If the image below is your current uploaded image, you can download the annotations right away - no need to rerun inference.")
+
+# Sidebar will have the uploaded image
+st.markdown("""
+<style>
+.sidebar-image-container img {
+    border: 2px solid #aaa;
+    border-radius: 6px;
+    padding: 4px;
+    background-color: #f8f8f8;
+}
+</style>
+""", unsafe_allow_html=True)
+
+if "last_uploaded_image" in st.session_state:
+    st.sidebar.image(
+        st.session_state["last_uploaded_image"],
+        caption=None,
+        use_container_width=True
+    )
+    #display its filename
+if "last_filename" in st.session_state:
+    st.sidebar.markdown(
+        f"**Filename:** `{st.session_state['last_filename']}`"
+    )
+
 # Upload image
 insert_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
