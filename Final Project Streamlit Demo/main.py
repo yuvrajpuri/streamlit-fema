@@ -1,20 +1,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from utils.styles_utils import apply_light_styles, apply_dark_styles
 
 # First action
 st.set_page_config(page_title="FEMA Disaster Image Damage Detection", layout="centered", initial_sidebar_state="expanded")
 
-# Light-Dark modes
-# Toggle
-theme = st.radio("Choose theme:", ["Light", "Dark"], horizontal=True)
-
-# Apply light-dark mode after selecting toggle
-if theme == "Light":
-    apply_light_styles()
-else:
-    apply_dark_styles()
 
 st.title("Demo (of Full Demo)")
 st.sidebar.success("Select a page to view the demonstration.")
