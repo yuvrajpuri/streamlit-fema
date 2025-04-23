@@ -45,44 +45,47 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
 
     # The cropped images - show and make them selectable for download
     st.subheader("Cropped Regions")
-
+    
     # Select All Toggle for the cropped images
     select_all = st.checkbox("Select All Crops", value = False)
 
+    # Put the selectable images in an expander to keep things easy to look at
+    with st.expander("Select Cropped Regions for Download", expanded=False)
+
     # List containing the cropped images that we selectively include
-    chosen_crop_ids = []
+        chosen_crop_ids = []
 
     # Saving the cropped images to the session state
     # Refresh crops when the image changes
-    if (
-        "last_filename" not in st.session_state
-        or st.session_state.get("cropped_images_filename") != st.session_state["last_filename"]
-    ):
+        if (
+            "last_filename" not in st.session_state
+            or st.session_state.get("cropped_images_filename") != st.session_state["last_filename"]
+        ):
     # Regenerate crops for the new image
-        st.session_state["cropped_images"] = [
-            crop_bbox(image, det["bbox"]) for det in detections
-        ]
-        st.session_state["cropped_images_filename"] = st.session_state["last_filename"]        
+            st.session_state["cropped_images"] = [
+                crop_bbox(image, det["bbox"]) for det in detections
+            ]
+            st.session_state["cropped_images_filename"] = st.session_state["last_filename"]        
     
-    for i, (det, cropped) in enumerate(zip(detections, st.session_state["cropped_images"])):
+        for i, (det, cropped) in enumerate(zip(detections, st.session_state["cropped_images"])):
         
-        col1, col2 = st.columns([1,3])
+            col1, col2 = st.columns([1,3])
         
         # Column 1 - the checkboxes
-        with col1:
-            include = st.checkbox(
-                f"Include Crop {i+1}",
-                key=f"include_{i}",
-                value=select_all
-            )
-            if include:
-                chosen_crop_ids.append(i)
+            with col1:
+                include = st.checkbox(
+                    f"Include Crop {i+1}",
+                    key=f"include_{i}",
+                    value=select_all
+                )
+                if include:
+                    chosen_crop_ids.append(i)
 
         # Cropped images themselves
-        with col2:
-            #cropped = crop_bbox(image, det["bbox"])
-            label = CATEGORY_LABELS.get(det["category_id"], "Unknown")
-            st.image(cropped, caption=f"Crop {i+1}: {label}", width=200)
+            with col2:
+                #cropped = crop_bbox(image, det["bbox"])
+                label = CATEGORY_LABELS.get(det["category_id"], "Unknown")
+                st.image(cropped, caption=f"Crop {i+1}: {label}", width=200)
 
     if chosen_crop_ids:
         zip_buffer = BytesIO()
