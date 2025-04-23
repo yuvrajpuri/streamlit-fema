@@ -94,7 +94,7 @@ def build_coco_json(image_name, width, height, detections):
 st.title("YOLOv11 Object Detection (Sample)")
 st.write("Upload an image and detect disaster damage using a trained YOLOv11 model.")
 
-st.sidebar.markdown("If the image below is your current uploaded image, you can download the annotations right away - no need to rerun inference.")
+st.sidebar.markdown("*If the image below is your current uploaded image, you can download the annotations right away - no need to rerun inference.*")
 
 # Sidebar will have the uploaded image
 st.markdown("""
@@ -119,6 +119,8 @@ if "last_filename" in st.session_state:
     st.sidebar.markdown(
         f"**Filename:** `{st.session_state['last_filename']}`"
     )
+
+# Should we also include a download button for the COCO JSON annotations beneath it?
 
 # Upload image
 insert_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
