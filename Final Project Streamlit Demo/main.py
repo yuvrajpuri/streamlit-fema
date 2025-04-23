@@ -42,5 +42,5 @@ div.stButton > button:hover {
 </style>""", unsafe_allow_html=True)
 
 if st.button("Click me",):
-    st.ballons()
+    st.balloons()
     st.write("Surprise!")
