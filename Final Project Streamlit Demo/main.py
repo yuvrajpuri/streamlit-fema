@@ -31,15 +31,31 @@ st.write(
 
 m= st.markdown("""
 <style>
+/* Default button style */
 div.stButton > button:first-child {
     background-color: #ff99ff;
-    color:#ffffff;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 0.5em 1em;
+    transition: background-color 0.3s, color 0.3s;
 }
+
+/* Hover */
 div.stButton > button:hover {
-    background-color: #FF0000;
-    color:#ff99ff;
-    }
-</style>""", unsafe_allow_html=True)
+    background-color: #ff4d4d;
+    color: #ffffff;
+}
+
+/* Focus (after clicking) */
+div.stButton > button:focus,
+div.stButton > button:active {
+    background-color: #ff99ff !important;
+    color: #ffffff !important;
+    outline: none;
+}
+</style>
+""", unsafe_allow_html=True)
 
 if st.button("Click me",):
     st.balloons()
