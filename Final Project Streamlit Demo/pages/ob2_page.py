@@ -27,6 +27,7 @@ from utils.zip_utils import clean_annotation
 # We need to adjust the method in the model_utils file
 # MODEL_PATH = "/content/best.pt"
 
+st.set_page_config(page_title="Object Detection", layout="wide", initial_sidebar_state="expanded")
 
 # Load model once
 
@@ -87,7 +88,6 @@ def build_coco_json(image_name, width, height, detections):
 
 # Page Actions
 
-st.set_page_config(page_title="Object Detection", layout="wide", initial_sidebar_state="expanded")
 
 
 # User interface - the title and the guiding text.
