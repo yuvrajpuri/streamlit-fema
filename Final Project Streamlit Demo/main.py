@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # First action
-st.set_page_config(page_title="FEMA Disaster Image Damage Detection", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title="FEMA Disaster Image Damage Detection", layout="wide", initial_sidebar_state="expanded")
 
 
 st.title("Demo (of Full Demo)")
@@ -15,6 +15,32 @@ st.write("Still under development is a page to show or run our model and the det
 st.markdown("# Main page")
 st.sidebar.markdown("# Main page")
 st.sidebar.write("*Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.*")
+
+
+# Sidebar will have the uploaded image
+st.markdown("""
+<style>
+.sidebar-image-container img {
+    border: 2px solid #aaa;
+    border-radius: 6px;
+    padding: 4px;
+    background-color: #f8f8f8;
+}
+</style>
+""", unsafe_allow_html=True)
+
+if "last_uploaded_image" in st.session_state:
+    st.sidebar.image(
+        st.session_state["last_uploaded_image"],
+        caption=None,
+        use_column_width=True
+    )
+    #display its filename
+if "last_filename" in st.session_state:
+    st.sidebar.markdown(
+        f"**Filename:** `{st.session_state['last_filename']}`"
+    )
+
 
 st.write(
     """
@@ -29,34 +55,4 @@ st.write(
     """)
 
 
-m= st.markdown("""
-<style>
-/* Default button style */
-div.stButton > button:first-child {
-    background-color: #ff99ff;
-    color: #ffffff;
-    border-radius: 8px;
-    font-weight: bold;
-    padding: 0.5em 1em;
-    transition: background-color 0.3s, color 0.3s;
-}
 
-/* Hover */
-div.stButton > button:hover {
-    background-color: #ff4d4d;
-    color: #ffffff;
-}
-
-/* Focus (after clicking) */
-div.stButton > button:focus,
-div.stButton > button:active {
-    background-color: #ff99ff !important;
-    color: #ffffff !important;
-    outline: none;
-}
-</style>
-""", unsafe_allow_html=True)
-
-if st.button("Click me",):
-    st.balloons()
-    st.write("Surprise!")
