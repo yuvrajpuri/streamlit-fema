@@ -50,7 +50,7 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
     select_all = st.checkbox("Select All Crops", value = False)
 
     # Put the selectable images in an expander to keep things easy to look at
-    with st.expander("Select Cropped Regions for Download", expanded=False)
+    with st.expander("Select Cropped Regions for Download", expanded=False):
 
     # List containing the cropped images that we selectively include
         chosen_crop_ids = []
