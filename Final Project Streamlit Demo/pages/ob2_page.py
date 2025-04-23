@@ -87,6 +87,9 @@ def build_coco_json(image_name, width, height, detections):
 
 # Page Actions
 
+st.set_page_config(page_title="Object Detection", layout="wide", initial_sidebar_state="expanded")
+
+
 # User interface - the title and the guiding text.
 st.title("YOLOv11 Object Detection (Sample)")
 st.write("Upload an image and detect disaster damage using a trained YOLOv11 model.")
