@@ -27,3 +27,20 @@ st.write(
     - [FEMA website](https://www.fema.gov/)
     
     """)
+
+
+m= st.markdown("""
+<style>
+div.stButton > button:first-child {
+    background-color: ##ff99ff;
+    color:#ffffff;
+}
+div.stButton > button:hover {
+    background-color: #FF0000;
+    color:##ff99ff;
+    }
+</style>""", unsafe_allow_html=True)
+
+if st.button("Click me",):
+    st.ballons()
+    st.write("Surprise!")
