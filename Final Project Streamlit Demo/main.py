@@ -9,12 +9,11 @@ st.set_page_config(page_title="FEMA Disaster Image Damage Detection", layout="wi
 st.title("Demo (of Full Demo)")
 st.sidebar.success("Select a page to view the demonstration.")
 
-st.write("This app demonstrates object detection, image cropping, captioning, and geolocation mapping on disaster images. And a final output.")
-st.write("Still under development is a page to show or run our model and the details about how it compares or works without taking too much time / computation.")
+st.write("This app demonstrates a pipeline of object detection, image cropping, and captioning on disaster images taken from an aerial view. The outputs include single photo inference outputs and batch inference outputs of JSON annotations with the bounding box data.")
 
 st.markdown("# Main page")
 st.sidebar.markdown("# Main page")
-st.sidebar.write("*Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.*")
+st.sidebar.write("*If you upload and run inference on a single image, you can keep track of that image below. This is also what is currently on the Crop page.*")
 
 
 # Sidebar will have the uploaded image
@@ -33,7 +32,7 @@ if "last_uploaded_image" in st.session_state:
     st.sidebar.image(
         st.session_state["last_uploaded_image"],
         caption=None,
-        use_column_width=True
+        use_container_width=True
     )
     #display its filename
 if "last_filename" in st.session_state:
