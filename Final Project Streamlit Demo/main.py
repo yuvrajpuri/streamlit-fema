@@ -12,7 +12,7 @@ st.sidebar.success("Select a page to view the demonstration.")
 st.write("This app demonstrates a pipeline of object detection, image cropping, and captioning on disaster images taken from an aerial view. The outputs include single photo inference outputs and batch inference outputs of JSON annotations with the bounding box data.")
 
 st.markdown("# Main page")
-st.sidebar.markdown("# Main page")
+#st.sidebar.markdown("# Main page")
 st.sidebar.write("*If you upload and run inference on a single image, you can keep track of that image below. This is also what is currently on the Crop page.*")
 
 
