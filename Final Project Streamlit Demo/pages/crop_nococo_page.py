@@ -6,7 +6,7 @@ import zipfile
 from io import BytesIO
 
 # utils imports
-# from utils.image_utils import crop_bbox, draw_bounding_boxes
+from utils.image_utils import crop_bbox, draw_bounding_boxes
 from utils.zip_utils import clean_annotation
 
 # Labels for the damage
@@ -15,25 +15,6 @@ CATEGORY_LABELS = {
     2: "Major damage"
 }
 
-# Helper functions
-# Recreated cleaning the filename for the json
-# def clean_annotation(filename):
-#    return os.path.splitext(filename)[0]
-    
-# Crop image
-def crop_bbox(image, bbox):
-    x, y, w, h = bbox
-    return image.crop((x, y, x + w, y + h))
-
-# Put the bounding boxes on the image
-def draw_bounding_boxes(image, detections):
-    draw = ImageDraw.Draw(image)
-    for det in detections:
-        x, y, w, h = det["bbox"]
-        category_id = det["category_id"]
-        color = "purple" if category_id == 1 else "yellow"
-        draw.rectangle([x, y, x + w, y + h], outline=color, width=2)
-    return image
 
 # Save the image that has the bounding boxes
 def ds_bbox_image(image, annotations):
