@@ -8,7 +8,6 @@ import os
 import json
 
 # Needed for COCO annotation generation
-#import uuid
 from datetime import datetime
 
 # After loading image via PIL
@@ -16,22 +15,23 @@ from datetime import datetime
 from PIL.ExifTags import TAGS
 
 # Utils imports
-from utils.model_utils import load_model
+from utils.model_utils import 
 from utils.annotation_utils import get_date_captured
 from utils.zip_utils import clean_annotation
 
-# try replacing the current code with these utils imports
 
-# Absolute path to the model in Colab - assuming its been pre-uploaded. Need to adjust for a better solution.
-# If we need to change the model as opposed to hardcoding it in the repository (but it's on colab)
-# We need to adjust the method in the model_utils file
-# MODEL_PATH = "/content/best.pt"
 
 st.set_page_config(page_title="Object Detection", layout="wide", initial_sidebar_state="expanded")
 
-# Load model once
+# Load model once, check for it
 
-model, DEVICE = load_model()
+if "model" not in st.session_state:
+    st.warning("No model loaded. Please upload a model on the Main page.")
+    st.stop()
+    
+model = st.session_state["model"]
+device = st.session_state["device"]
+
 
 # helper function to build the COCO that we obtain. it's barebones, focused on 1 image at a time
 def build_coco_json(image_name, width, height, detections):
