@@ -52,10 +52,12 @@ st.write("To run this app, you will need to upload a YOLO model to run inference
 # Upload model
 uploaded_model = st.file_uploader("Upload your model (.pt, .pth, etc)", type=["pt", "pth"])
 if uploaded_model is not None:
-    model, device = load_model_check(uploaded_model)
-    st.session_state["model"] = model
-    st.session_state["device"] = device
-    st.success("**YOLO model loaded and ready for use.**"
+    with st.spinner("Loading uploaded model... please wait."):
+        
+        model, device = load_model_check(uploaded_model)
+        st.session_state["model"] = model
+        st.session_state["device"] = device
+    st.success("**YOLO model loaded and ready for use.**")
 
 st.write(
     """
