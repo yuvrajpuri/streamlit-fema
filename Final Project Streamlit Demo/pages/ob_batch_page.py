@@ -26,28 +26,6 @@ from utils.image_utils import crop_bbox, draw_bounding_boxes
 
 model, DEVICE = load_model()
 
-#CATEGORY_MAP = {
-#    "Affected_Building": 1,
-#    "Major_Damage": 2
-#}
-
-#CATEGORY_LABELS = {
-#    1: "Affected building",
-#    2: "Major damage"
-#}
-
-# crop_bbox and draw bbox SHOULD be fine as is without adjustment
-# commenting out draw bbox for the reference
-
-#def draw_bounding_boxes(image, annotations):
-#    draw = ImageDraw.Draw(image)
-#    for ann in annotations:
-#        x, y, w, h = ann["bbox"]
-#        color = "purple" if ann["category_id"] == 1 else "yellow"
-#        draw.rectangle([x, y, x + w, y + h], outline=color, width=3)
-#    return image
-
-# ----------------------------
 
 # Display and Work
 
