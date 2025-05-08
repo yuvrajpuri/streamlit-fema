@@ -40,6 +40,17 @@ if "last_filename" in st.session_state:
         f"**Filename:** `{st.session_state['last_filename']}`"
     )
 
+# Link to Google Drive
+st.markdown("""
+### Download Model
+[Download the model here](https://drive.google.com/file/d/1YK_ykzgCNtuUHJayYXkhaLDOs3Mdmvr0/view?usp=drive_link) and upload it below.
+""", unsafe_allow_html=True)
+
+st.write("To run this app, you will need to upload a YOLO model to run inference with. The one above is a fine-tuned YOLOv11 model but you may provide your own.")
+
+# Upload model
+uploaded_model = st.file_uploader("Upload your model (.pt, .pth, etc)", type=["pt", "pth"])
+
 
 st.write(
     """
