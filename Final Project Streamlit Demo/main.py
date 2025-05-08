@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from utils.model_utils import load_model_check
 
 # First action
 st.set_page_config(page_title="FEMA Disaster Image Damage Detection", layout="wide", initial_sidebar_state="expanded")
@@ -50,7 +51,11 @@ st.write("To run this app, you will need to upload a YOLO model to run inference
 
 # Upload model
 uploaded_model = st.file_uploader("Upload your model (.pt, .pth, etc)", type=["pt", "pth"])
-
+if uploaded_model is not None:
+    model, device = load_model_check(uploaded_model)
+    st.session_state["model"] = model
+    st.session_state["device"] = device
+    st.success("**YOLO model loaded and ready for use.**"
 
 st.write(
     """
@@ -59,9 +64,7 @@ st.write(
     **Example Research and Sources (final product may not reflect this):**
     - [Original LADIv2 Paper Done By MIT on arXiv](https://arxiv.org/abs/2406.02780)
     - [LADIv2 Repository on HuggingFace](https://huggingface.co/datasets/MITLL/LADI-v2-dataset)
-    - [Civil Air Patrol website](https://www.gocivilairpatrol.com/)
-    - [FEMA website](https://www.fema.gov/)
-    
+        
     """)
 
 
