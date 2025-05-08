@@ -11,25 +11,32 @@ from io import BytesIO
 import zipfile
 
 # Needed for COCO annotation generation
-import uuid
 from datetime import datetime
 
 # After loading image via PIL
 from PIL.ExifTags import TAGS
 
 # utils files imports
-from utils.model_utils import load_model
 from utils.annotation_utils import get_date_captured, CATEGORY_MAP
 from utils.zip_utils import clean_annotation
 from utils.image_utils import crop_bbox, draw_bounding_boxes
 # for info with regards to the path to the YOLO model, refer to ob2 and model_utils
 
-model, DEVICE = load_model()
+# Load model once, check for it
 
+if "model" not in st.session_state:
+    st.warning("No model loaded. Please upload a model on the Main page.")
+    st.stop()
+    
+model = st.session_state["model"]
+device = st.session_state["device"]
 
 # Display and Work
 
 st.title("Batch Object Detection Tool")
+
+if "uploaded_batch_files" in st.session_state:
+    del st.session_state["uploaded_batch_files"]
 
 batch_files = st.file_uploader(
     "Upload a folder of images",
@@ -38,7 +45,12 @@ batch_files = st.file_uploader(
 )
 
 if batch_files:
+    # Store the uploaded files
+    st.session_state["uploaded_batch_files"] = batch_files
 
+if "uploaded_batch_files" in st.session_state:
+
+    batch_files = st..session_state["uploaded_batch_files"]
     # Clear ZIP batch when new batch is uploaded
     uploaded_names = [f.name for f in batch_files]
     if uploaded_names != st.session_state.get("last_uploaded_batch",[]):
