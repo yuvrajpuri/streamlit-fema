@@ -81,7 +81,7 @@ if "uploaded_batch_files" in st.session_state:
                 img_name = uploaded.name
                 conception = get_date_captured(image)
 
-                results = model(image, device=DEVICE)
+                results = model(image, device=device)
                 result = results[0]
                 boxes = result.boxes
 
