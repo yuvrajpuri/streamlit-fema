@@ -23,6 +23,6 @@ def load_model_check(uploaded_model):
     device = "mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu"
     model = YOLO(tmp_modelpath)
     # Remove the temp file after loading
-    os.remove(tmp_model_path)
+    os.remove(tmp_modelpath)
     model.to(device)
     return model, device
