@@ -15,7 +15,7 @@ from datetime import datetime
 from PIL.ExifTags import TAGS
 
 # Utils imports
-from utils.model_utils import 
+
 from utils.annotation_utils import get_date_captured
 from utils.zip_utils import clean_annotation
 
