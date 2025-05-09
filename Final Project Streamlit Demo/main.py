@@ -1,19 +1,18 @@
+# Imports and util files
 import streamlit as st
 import pandas as pd
 import numpy as np
 from utils.model_utils import load_model_check
 
-# First action
+# First action for displaying the pages
 st.set_page_config(page_title="FEMA Disaster Image Damage Detection", layout="wide", initial_sidebar_state="expanded")
 
 
-st.title("Demo (of Full Demo)")
+st.title("Main Page")
 st.sidebar.success("Select a page to view the demonstration.")
 
 st.write("This app demonstrates a pipeline of object detection, image cropping, and captioning on disaster images taken from an aerial view. The outputs include single photo inference outputs and batch inference outputs of JSON annotations with the bounding box data.")
 
-st.markdown("# Main page")
-#st.sidebar.markdown("# Main page")
 st.sidebar.write("*If you upload and run inference on a single image, you can keep track of that image below. This is also what is currently on the Crop page.*")
 
 
@@ -41,7 +40,7 @@ if "last_filename" in st.session_state:
         f"**Filename:** `{st.session_state['last_filename']}`"
     )
 
-# Link to Google Drive
+# Link to Google Drive with YOLO Model
 st.markdown("""
 ### Download Model
 [Download the model here](https://drive.google.com/file/d/1YK_ykzgCNtuUHJayYXkhaLDOs3Mdmvr0/view?usp=drive_link) and upload it below.
@@ -61,7 +60,7 @@ if uploaded_model is not None:
 
 st.write(
     """
-    Below this, you will see a number of hyperlinks to direct you to the previous bodies of research or groups that provided data that guided this project.
+    Below this, you will see a number of hyperlinks to direct you to the previous bodies of research or groups that provided data that inspired this project.
     
     **Example Research and Sources (final product may not reflect this):**
     - [Original LADIv2 Paper Done By MIT on arXiv](https://arxiv.org/abs/2406.02780)
