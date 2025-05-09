@@ -6,29 +6,7 @@ CATEGORY_MAP = {
     "Major_Damage": 2
 }
 
-# if we remove the debugging, use this version
-#def get_date_captured(image):
-#    """
-#    Extracts the most accurate capture datetime from EXIF metadata.
-#    Falls back to current timestamp if unavailable.
-#    """
-#    try:
-#        # Prefer modern getexif(), fallback to older _getexif()
-#        exif = image.getexif() if hasattr(image, "getexif") else image._getexif()
-#        if exif:
-#            # Priority order for EXIF date fields
-#            for tag, val in exif.items():
-#                tag_name = TAGS.get(tag, str(tag))
-#                if tag_name in ["DateTimeOriginal", "DateTimeDigitized", "DateTime"]:
-#                    try:
-#                        return datetime.strptime(val, "%Y:%m:%d %H:%M:%S").isoformat()
-#                    except Exception:
-#                        pass  # Ignore parse errors
-#    except Exception:
-#        pass
 
-    # Fallback to current datetime
-#    return datetime.now().isoformat()
 
 def get_date_captured(image, verbose=False):
     """
@@ -60,4 +38,3 @@ def get_date_captured(image, verbose=False):
     if verbose:
         print("📆 No valid EXIF date found, using current timestamp.")
     return datetime.now().isoformat()
-# def build_coco_json?
