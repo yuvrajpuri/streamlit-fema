@@ -4,8 +4,6 @@ import streamlit as st
 import os
 import tempfile
 
-# Absolute path to the model in Colab - assuming its been pre-uploaded. Need to adjust for a better solution.
-
 
 # Load model once
 @st.cache_resource
