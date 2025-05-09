@@ -15,4 +15,3 @@ def draw_bounding_boxes(image, detections):
         draw.rectangle([x, y, x + w, y + h], outline=color, width=2)
     return image
 
-# Needs ds_bbox?
