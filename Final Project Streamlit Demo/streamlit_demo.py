@@ -2,9 +2,9 @@ import streamlit as st
 
 main_page = st.Page("main.py", title="Main Page")
 
-ob2_page = st.Page("pages/ob2_page.py", title = "Object Detection (example)")
+ob2_page = st.Page("pages/ob2_page.py", title = "Single Upload Object Detection")
 
-crop_nococo_page = st.Page("pages/crop_nococo_page.py", title = "Cropping without JSON")
+crop_nococo_page = st.Page("pages/crop_nococo_page.py", title = "Cropping")
 
 ob_batch = st.Page("pages/ob_batch_page.py", title= "Batch Object Detection")
 
