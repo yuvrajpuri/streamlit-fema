@@ -50,7 +50,7 @@ if batch_files:
 
 if "uploaded_batch_files" in st.session_state:
 
-    batch_files = st..session_state["uploaded_batch_files"]
+    batch_files = st.session_state["uploaded_batch_files"]
     # Clear ZIP batch when new batch is uploaded
     uploaded_names = [f.name for f in batch_files]
     if uploaded_names != st.session_state.get("last_uploaded_batch",[]):
