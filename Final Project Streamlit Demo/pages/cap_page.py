@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("Captioning Tool (Coming Soon)")
+st.title("Captioning Tool Demonstration")
 
 st.markdown("This page will show you to generate captions for disaster images using our OpenAI GPT-4o vision-language model.")
 
