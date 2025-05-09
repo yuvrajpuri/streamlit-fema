@@ -120,7 +120,6 @@ if "last_filename" in st.session_state:
         f"**Filename:** `{st.session_state['last_filename']}`"
     )
 
-# Should we also include a download button for the COCO JSON annotations beneath it?
 
 # Upload image
 insert_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
