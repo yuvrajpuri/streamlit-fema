@@ -144,7 +144,7 @@ if insert_file is not None:
 
     if st.button("Run Inference"):
         with st.spinner("Running inference..."):
-            results = model(pic, device=DEVICE)
+            results = model(pic, device=device)
             result = results[0]
 
             # Display image with detections
