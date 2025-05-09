@@ -31,6 +31,10 @@ if "model" not in st.session_state:
 model = st.session_state["model"]
 device = st.session_state["device"]
 
+
+
+
+# - - - - - - - - - - -
 # Display and Work
 
 st.title("Batch Object Detection Tool")
