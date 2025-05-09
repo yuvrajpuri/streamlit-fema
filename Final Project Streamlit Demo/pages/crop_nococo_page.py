@@ -33,6 +33,7 @@ def ds_bbox_image(image, annotations):
 # Start of page
 st.title("Cropping Tool")
 
+# Checking for the uploaded image from the ob2page.py
 if "last_uploaded_image" in st.session_state and "last_detections" in st.session_state and "last_annotations" in st.session_state:
     image = st.session_state["last_uploaded_image"]
     detections = st.session_state["last_detections"]
@@ -52,16 +53,16 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
     # Put the selectable images in an expander to keep things easy to look at
     with st.expander("View selectable crops for download", expanded=False):
 
-    # List containing the cropped images that we selectively include
+        # List containing the cropped images that we selectively include
         chosen_crop_ids = []
 
-    # Saving the cropped images to the session state
-    # Refresh crops when the image changes
+        # Saving the cropped images to the session state
+        # Refresh crops when the image changes
         if (
             "last_filename" not in st.session_state
             or st.session_state.get("cropped_images_filename") != st.session_state["last_filename"]
         ):
-    # Regenerate crops for the new image
+            # Regenerate crops for the new image
             st.session_state["cropped_images"] = [
                 crop_bbox(image, det["bbox"]) for det in detections
             ]
@@ -71,7 +72,7 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
         
             col1, col2 = st.columns([1,3])
         
-        # Column 1 - the checkboxes
+            # Column 1 - the checkboxes
             with col1:
                 include = st.checkbox(
                     f"Include Crop {i+1}",
@@ -81,7 +82,7 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
                 if include:
                     chosen_crop_ids.append(i)
 
-        # Cropped images themselves
+            # Cropped images themselves
             with col2:
                 #cropped = crop_bbox(image, det["bbox"])
                 label = CATEGORY_LABELS.get(det["category_id"], "Unknown")
@@ -90,7 +91,7 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
     if chosen_crop_ids:
         zip_buffer = BytesIO()
 
-            # To the annotations, add whether or not they were chosen to be downloaded
+        # To the annotations, add whether or not they were chosen to be downloaded
         copied_annotations = []
         for i, anno in enumerate(coco_data["annotations"]):
             anno2 = anno.copy()
@@ -103,18 +104,19 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
             "categories": coco_data["categories"]
         }
 
-            # The zipfile
+        # The zipfile generated
         clean_filename = clean_annotation(imgname)
         with zipfile.ZipFile(zip_buffer, "w") as zip_file:
-                # Save the new COCO JSON
+            
+            # Save the new COCO JSON
             coco_json_str = json.dumps(new_coco_export, indent=2)
             zip_file.writestr(f"{clean_filename}_annotations.json", coco_json_str)
 
-                # Save the picture of the image with the bounding boxes
+            # Save the picture of the image with the bounding boxes
             saved_bbox_image = ds_bbox_image(image, detections)
             zip_file.writestr(f"{clean_filename}_bboxes.jpg", saved_bbox_image.read())
 
-                # Save the crops that we chose
+            # Save the crops that we chose
             for i in chosen_crop_ids:
                 crop = st.session_state["cropped_images"][i]
                 cropimg_bytes = BytesIO()
@@ -122,7 +124,8 @@ if "last_uploaded_image" in st.session_state and "last_detections" in st.session
                 cropimg_bytes.seek(0)
 
                 zip_file.writestr(f"{clean_filename}_crop_{i}.jpg", cropimg_bytes.read())
-
+                
+        # Download ZIP file
         st.download_button(
             label="Download ZIP",
             data=zip_buffer.getvalue(),
